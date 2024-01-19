@@ -6,12 +6,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "elegantweb/sanitizer": "^2.1",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/fortify": "^1.20",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
-        "spatie/laravel-html": "^3.4"
+        "spatie/laravel-activitylog": "^4.7",
+        "spatie/laravel-html": "^3.4",
+        "spatie/laravel-permission": "^6.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.9",

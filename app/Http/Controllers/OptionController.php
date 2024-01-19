@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OptionRequest;
 use App\Models\Option;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
@@ -59,9 +60,13 @@ class OptionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(OptionRequest $request)
     {
-        //
+        Option::create($request->all());
+
+        session()->flash('success', 'Data berhasil disimpan!');
+
+        return "<script>window.location='".route('options.index')."'</script>";
     }
 
     /**
@@ -75,7 +80,7 @@ class OptionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Option $option)
+    public function edit(Option $option): Renderable
     {
         $statusList = Option::statusList();
 
@@ -85,9 +90,13 @@ class OptionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Option $option)
+    public function update(OptionRequest $request, Option $option)
     {
-        //
+        $option->update($request->all());
+
+        session()->flash('success', 'Data berhasil di-update!');
+
+        return "<script>window.location='".route('options.index')."'</script>";
     }
 
     /**
@@ -95,6 +104,10 @@ class OptionController extends Controller
      */
     public function destroy(Option $option)
     {
-        //
+        $option->delete();
+
+        session()->flash('success', 'Data berhasil dihapus!');
+
+        return "<script>window.location='".route('options.index')."'</script>";
     }
 }

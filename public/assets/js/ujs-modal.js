@@ -6,6 +6,8 @@ $(document).on('ajax:success', function (_, xhr) {
             $('body').append('<div class="modal fade show" id="modal" tabindex="-1" aria-labelledby="modal"></div>');
         }
 
-        $('#modal').html(xhr).modal('show');
+        $('#modal').html(xhr)
+            .modal({ backdrop: 'static', keyboard: false })
+            .modal('show');
     }
 });

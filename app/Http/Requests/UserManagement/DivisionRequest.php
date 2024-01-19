@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\UserManagement;
 
-use App\Models\Option;
+use App\Models\UserManagement\Division;
 use Elegant\Sanitizer\Laravel\SanitizesInput;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class OptionRequest extends FormRequest
+class DivisionRequest extends FormRequest
 {
     use SanitizesInput;
 
@@ -28,9 +28,8 @@ class OptionRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'value' => ['required', 'string'],
             'notes' => ['nullable', 'string'],
-            'status' => ['required', Rule::in(array_keys(Option::statusList()))],
+            'status' => ['required', Rule::in(array_keys(Division::statusList()))],
         ];
     }
 
@@ -38,19 +37,18 @@ class OptionRequest extends FormRequest
     {
         return [
             'name' => ['trim', 'escape', 'strip_tags'],
-            'value' => ['trim', 'escape', 'strip_tags'],
             'notes' => ['trim', 'escape', 'strip_tags'],
         ];
     }
 
     protected function getRedirectUrl(): string
     {
-        $option = $this->route()->parameter('option');
+        $division = $this->route()->parameter('division');
 
-        if ($option) {
-            return route('options.edit', $option);
+        if ($division) {
+            return route('divisions.edit', $division);
         }
 
-        return route('options.create');
+        return route('divisions.create');
     }
 }

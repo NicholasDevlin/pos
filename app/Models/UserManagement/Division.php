@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\UserManagement;
 
 use App\Traits\HasActivityLogOptions;
 use App\Traits\HasDateSerialization;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Option extends Model
+class Division extends Model
 {
     use HasActivityLogOptions, HasDateSerialization, HasFactory, LogsActivity;
 
@@ -18,7 +18,6 @@ class Option extends Model
 
     protected $fillable = [
         'name',
-        'value',
         'notes',
         'status',
     ];

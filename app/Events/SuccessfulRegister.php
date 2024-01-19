@@ -12,6 +12,8 @@ class SuccessfulRegister implements AuthenticationEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public array $properties;
+
     /**
      * Create a new event instance.
      */

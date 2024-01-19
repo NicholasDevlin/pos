@@ -17,6 +17,16 @@
                     <a href="{{ route('dashboard') }}"><i class="feather-home"></i><span>Dashboard</span></a>
                 </li>
 
+                <li class="menu-title">Manajemen Pengguna</li>
+
+                <li>
+                    <a class="has-arrow" href="javascript: void(0);"><i class="feather-user-plus"></i><span>Akses Pengguna</span></a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{ route('locations.index') }}">Lokasi</a></li>
+                        <li><a href="{{ route('divisions.index') }}">Divisi</a></li>
+                    </ul>
+                </li>
+
                 <li class="menu-title">Lainnya</li>
 
                 <li>

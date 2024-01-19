@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\UserManagement\DivisionController;
+use App\Http\Controllers\UserManagement\LocationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,4 +28,9 @@ Route::group(['middleware' => ['prevent-back-history', 'auth']], function () {
     });
 
     Route::resource('options', OptionController::class);
+
+    Route::group(['prefix' => 'user-management'], function () {
+        Route::resource('locations', LocationController::class);
+        Route::resource('divisions', DivisionController::class);
+    });
 });
