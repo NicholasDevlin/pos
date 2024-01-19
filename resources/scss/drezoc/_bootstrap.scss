@@ -16,3 +16,13 @@
 @import "../../drezoc/scss/components/dropdown";
 @import "../../drezoc/scss/components/nav";
 @import "../../drezoc/scss/components/table";
+
+$btn-padding-x-xs:  .35rem !default;
+$btn-padding-y-xs:  .25rem !default;
+$font-size-xs: 1rem;
+$input-btn-line-height-xs: 1.1 !default;
+
+.btn.btn-xs {
+    // line-height: ensure proper height of button next to small input
+    @include button-size($btn-padding-y-xs, $btn-padding-x-xs, $font-size-xs, $input-btn-line-height-xs, $btn-border-radius-sm);
+}

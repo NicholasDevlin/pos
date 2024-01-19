@@ -13,10 +13,14 @@
 
         <div id="sidebar-menu">
             <ul class="metismenu list-unstyled" id="side-menu">
-                <li class="menu-title">Menu</li>
+                <li>
+                    <a href="{{ route('dashboard') }}"><i class="feather-home"></i><span>Dashboard</span></a>
+                </li>
+
+                <li class="menu-title">Lainnya</li>
 
                 <li>
-                    <a href="/"><i class="feather-home"></i><span class="badge badge-pill badge-success float-right">1</span><span>Dashboard</span></a>
+                    <a href="{{ route('options.index') }}"><i class="feather-settings"></i><span>Konfigurasi</span></a>
                 </li>
             </ul>
         </div>

@@ -23,6 +23,7 @@
     <div class="menu-overlay"></div>
 
     @include('partials.scripts')
+    @stack('scripts')
 </body>
 
 </html>

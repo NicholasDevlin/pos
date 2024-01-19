@@ -7,11 +7,15 @@
     "require": {
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
+        "laravel/fortify": "^1.20",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
-        "laravel/tinker": "^2.8"
+        "laravel/tinker": "^2.8",
+        "spatie/laravel-html": "^3.4"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.9",
+        "beyondcode/laravel-query-detector": "^1.8",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.18",
@@ -21,6 +25,9 @@
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
+        "files": [
+            "app/Helpers/GlobalHelper.php"
+        ],
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",

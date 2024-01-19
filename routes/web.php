@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\OptionController;
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('pages.index');
+    return redirect('login');
+});
+
+Route::group(['middleware' => ['prevent-back-history', 'auth']], function () {
+    Route::group(['controller' => PageController::class], function () {
+        Route::get('/dashboard', 'dashboard')->name('dashboard');
+        Route::get('/user/password', 'editUserPassword')->name('user-password.edit');
+    });
+
+    Route::resource('options', OptionController::class);
 });

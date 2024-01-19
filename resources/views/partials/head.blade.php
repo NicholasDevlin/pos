@@ -4,7 +4,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <title>{{ (isset($metadata['title']) ? $metadata['title'] . ' - ' : '') . config('app.name', 'Laravel') }}</title>
-
     <link rel="shortcut icon" href="{{ Vite::asset('resources/drezoc/images/favicon.ico') }}">
-    @vite(['resources/scss/app.scss'])
+
+    @include('partials.styles')
+    @stack('styles')
 </head>

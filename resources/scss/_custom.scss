@@ -1,0 +1,23 @@
+.handsontable td {
+    &.htDimmed {
+        color: rgb(55, 55, 55);
+
+        &:hover {
+            cursor: default;
+        }
+
+        .htAutocompleteArrow {
+            display: none;
+        }
+    }
+
+    &:not(.htDimmed) {
+        &:hover {
+            cursor: text;
+        }
+    }
+}
+
+a[type=button] > * {
+    pointer-events: none;
+}

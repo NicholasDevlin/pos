@@ -4,3 +4,22 @@
 <script src="{{ asset('drezoc/js/simplebar.min.js') }}"></script>
 <script src="{{ asset('drezoc/js/waves.js') }}"></script>
 <script src="{{ asset('drezoc/js/theme.js') }}"></script>
+
+<script src="{{ asset('assets/plugins/handsontable/dist/handsontable.full.min.js') }}"></script>
+<script src="{{ asset('assets/js/handsontable.js') }}"></script>
+<script src="{{ asset('assets/plugins/axios/dist/axios.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/jquery-ujs/src/rails.js') }}"></script>
+<script src="{{ asset('assets/js/ujs-modal.js') }}"></script>
+
+<script src="{{ asset('assets/plugins/toastr/build/toastr.min.js') }}"></script>
+<script>
+    @session('success')
+    toastr['success']("{{ $value }}");
+    @endsession
+
+    @session('fail')
+    toastr['error']("{{ $value }}");
+    @endsession
+</script>
+
+<script src="{{ asset('assets/js/default.js') }}"></script>
