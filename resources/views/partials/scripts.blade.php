@@ -3,7 +3,7 @@
 <script src="{{ asset('drezoc/js/metismenu.min.js') }}"></script>
 <script src="{{ asset('drezoc/js/simplebar.min.js') }}"></script>
 <script src="{{ asset('drezoc/js/waves.js') }}"></script>
-<script src="{{ asset('drezoc/js/theme.js') }}"></script>
+<script src="{{ asset('assets/js/theme.js') }}"></script>
 
 <script src="{{ asset('assets/plugins/handsontable/dist/handsontable.full.min.js') }}"></script>
 <script src="{{ asset('assets/js/handsontable.js') }}"></script>

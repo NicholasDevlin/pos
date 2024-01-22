@@ -12,16 +12,14 @@ use App\Http\Responses\RegisterResponse;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
 use Laravel\Fortify\Fortify;
-use Laravel\Fortify\Http\Responses\RegisterResponse as RegisterResponseContract;
-
-use function App\Http\Helpers\global_config;
+use Symfony\Component\HttpFoundation\Response;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -46,6 +44,13 @@ class FortifyServiceProvider extends ServiceProvider
         //        Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         Fortify::loginView(fn () => view('auth.login'));
+
+        RateLimiter::for('login', function (Request $request) {
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+
+            return Limit::perMinute(5)->by($throttleKey);
+        });
+
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('username', $request->input('username'))->first();
 
@@ -66,12 +71,6 @@ class FortifyServiceProvider extends ServiceProvider
             event(new SuccessfulLogin(['username' => $request->input('username')]));
 
             return $user;
-        });
-
-        RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
-
-            return Limit::perMinute(5)->by($throttleKey);
         });
 
         if (filter_var(global_config('registration_availability', false), FILTER_VALIDATE_BOOL)) {

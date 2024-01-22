@@ -4,7 +4,7 @@
 @include('partials.head')
 
 <body>
-    <div class="bg-light">
+    <div style="background-color: #132843;">
         <div class="container">
             <div class="row">
                 <div class="col-6 mx-auto">

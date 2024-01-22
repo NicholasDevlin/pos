@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-    <div class="form-group mb-2">
+    <div class="form-group mb-4">
         @php
             $label = 'Nama';
             $name = 'name';
@@ -31,7 +31,7 @@
         @enderror
     </div>
 
-    <div class="form-group mb-2">
+    <div class="form-group mb-4">
         @php
             $label = 'Nilai';
             $name = 'value';
@@ -46,7 +46,7 @@
         @enderror
     </div>
 
-    <div class="form-group mb-2">
+    <div class="form-group mb-4">
         @php
             $label = 'Keterangan';
             $name = 'notes';
@@ -60,12 +60,13 @@
         @enderror
     </div>
 
-    <div class="form-group mb-2">
+    <div class="form-group mb-4">
         @php
             $label = 'Status';
             $name = 'status';
         @endphp
         {{ html()->label($label, $name) }}
+        <span class="text-danger">*</span>
 
         @foreach ($statusList as $key => $status)
             <div class="form-check">

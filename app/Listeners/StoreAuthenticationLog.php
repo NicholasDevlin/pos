@@ -6,7 +6,7 @@ use App\Events\Interfaces\AuthenticationEvent;
 use App\Events\SuccessfulLogin;
 use App\Events\SuccessfulRegister;
 use App\Events\UnsuccessfulLogin;
-use App\Models\AuthenticationLog;
+use App\Models\UserManagement\AuthenticationLog;
 
 class StoreAuthenticationLog
 {

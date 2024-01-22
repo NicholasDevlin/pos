@@ -24,7 +24,7 @@ class RegisterResponse implements RegisterResponseContract
         Session::flash('success', 'Registrasi berhasil. Silakan hubungi tim IT untuk melakukan aktivasi akun.');
 
         return $request->wantsJson()
-            ? new JsonResponse('', 201)
+            ? new JsonResponse('', Response::HTTP_CREATED)
             : redirect(config('fortify.registered'));
     }
 }

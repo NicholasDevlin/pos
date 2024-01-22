@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Http\Helpers;
-
 use App\Models\Option;
 use Illuminate\Support\Facades\Schema;
 

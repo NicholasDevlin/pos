@@ -1,9 +1,14 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\UserManagement\AuthenticationLogController;
 use App\Http\Controllers\UserManagement\DivisionController;
 use App\Http\Controllers\UserManagement\LocationController;
+use App\Http\Controllers\UserManagement\PermissionController;
+use App\Http\Controllers\UserManagement\RoleController;
+use App\Http\Controllers\UserManagement\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,9 +33,14 @@ Route::group(['middleware' => ['prevent-back-history', 'auth']], function () {
     });
 
     Route::resource('options', OptionController::class);
+    Route::get('logs', ActivityLogController::class)->name('logs');
 
     Route::group(['prefix' => 'user-management'], function () {
         Route::resource('locations', LocationController::class);
         Route::resource('divisions', DivisionController::class);
+        Route::resource('permissions', PermissionController::class);
+        Route::resource('roles', RoleController::class);
+        Route::resource('users', UserController::class);
+        Route::get('logs', AuthenticationLogController::class)->name('user-management.logs');
     });
 });

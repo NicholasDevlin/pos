@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\UserManagement;
 
+use App\Traits\HasDateSerialization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class AuthenticationLog extends Model
 {
-    use HasFactory;
+    use HasDateSerialization, HasFactory;
 
     protected $fillable = [
         'log_name',

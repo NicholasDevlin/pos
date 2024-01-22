@@ -16,6 +16,7 @@ class LocationController extends Controller
      */
     public function __construct()
     {
+        $this->middleware(['role:super-admin']);
         $this->middleware(['ajax'])->only(['create', 'show', 'edit']);
     }
 

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AllowOnlyAjaxRequest
 {
     /**
-     * Handle an incoming request."<a class='btn btn-xs btn-danger' data-remote='true' href='".route('options.destroy', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='delete' data-confirm='Apakah Anda yakin akan menghapus data ini?' title='Delete' onclick='if ($.rails.allowAction($(this))) $.rails.handleRemote($(this)); return false;'><i class='feather-trash-2 text-white'></i></a>",
+     * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
