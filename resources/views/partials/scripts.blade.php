@@ -11,6 +11,11 @@
 <script src="{{ asset('assets/plugins/jquery-ujs/src/rails.js') }}"></script>
 <script src="{{ asset('assets/js/ujs-modal.js') }}"></script>
 
+<script src="{{ asset('assets/plugins/bootstrap-multiselect/js/bootstrap-multiselect.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
+<script src="{{ asset('assets/plugins/Inputmask/jquery.inputmask.js') }}"></script>
+<script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
+
 <script src="{{ asset('assets/plugins/toastr/build/toastr.min.js') }}"></script>
 <script>
     @session('success')

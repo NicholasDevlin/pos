@@ -1,5 +1,5 @@
 # Copied from cyberduck/php-fpm-laravel
-# https://github.com/Cyber-Duck/php-fpm-laravel/blob/8.1/Dockerfile
+# https://github.com/Cyber-Duck/php-fpm-laravel/blob/8.2/Dockerfile
 
 FROM php:8.3-fpm
 
@@ -19,6 +19,7 @@ RUN apt-get update && \
         libfreetype6-dev \
         libssl-dev \
         openssh-server \
+        imagemagick \
         libmagickwand-dev \
         git \
         cron \
@@ -65,7 +66,14 @@ RUN pecl install redis && docker-php-ext-enable redis
 # Imagick:
 #####################################
 
-RUN pecl install imagick && \
+RUN cd /tmp && \
+    git clone https://github.com/Imagick/imagick && \
+    cd imagick && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install && \
+    rm -r /tmp/imagick && \
     docker-php-ext-enable imagick
 
 #####################################

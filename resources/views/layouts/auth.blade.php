@@ -7,7 +7,7 @@
     <div style="background-color: #132843;">
         <div class="container">
             <div class="row">
-                <div class="col-6 mx-auto">
+                <div class="col-sm-10 col-md-8 col-lg-7 col-xl-6 mx-auto">
                     <div class="d-flex align-items-center min-vh-100">
                         <div class="w-100 d-block bg-white shadow-lg rounded my-5">
                             <div class="row">

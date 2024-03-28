@@ -17,7 +17,7 @@ services:
         volumes:
             - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}${APP_CODE_CONTAINER_FLAG}
             - ${NGINX_SITES_PATH}:/etc/nginx/sites-available
-            - ${LETS_ENCRYPT_PATH}:${LETS_ENCRYPT_PATH}
+            - ${LETS_ENCRYPT_PATH}:/etc/letsencrypt
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         networks:
@@ -27,11 +27,11 @@ services:
         restart: always
     mariadb:
         image: 'mariadb:10'
-        ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
+        expose:
+            - '3306'
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_ROOT_PASSWORD}'
-            MYSQL_ROOT_HOST: '%'
+            MYSQL_ROOT_HOST: 'localhost'
             MYSQL_DATABASE: '${DB_DATABASE}'
             MYSQL_USER: '${DB_USERNAME}'
             MYSQL_PASSWORD: '${DB_PASSWORD}'
@@ -39,17 +39,8 @@ services:
             TZ: 'Asia/Jakarta'
         volumes:
             - './sail-mariadb:/var/lib/mysql'
-            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
             - sail
-        healthcheck:
-            test:
-                - CMD
-                - mysqladmin
-                - ping
-                - '-p${DB_PASSWORD}'
-            retries: 3
-            timeout: 5s
         restart: always
     npm:
         image: node:latest

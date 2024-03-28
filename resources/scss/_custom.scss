@@ -25,3 +25,12 @@ a[type=button] > * {
 .card-title {
     font-size: 1.15rem;
 }
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-selection__clear {
+    color: black !important;
+    margin-right: 20px !important;
+}
