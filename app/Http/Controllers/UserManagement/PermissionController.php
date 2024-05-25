@@ -41,11 +41,11 @@ class PermissionController extends Controller
                 $datum->created_at_frmt = $datum->created_at->format('d-m-Y H.i.s');
                 $datum->updated_at_frmt = $datum->updated_at->format('d-m-Y H.i.s');
 
-                $datum->actions = implode(' ', [
+                $datum->actions = implode(' ', array_filter([
                     "<a class='btn btn-xs btn-primary' href='".route('permissions.show', [$datum->id])."' title='Show'><i class='feather-eye text-white'></i></a>",
                     "<a class='btn btn-xs btn-secondary' data-remote='true' href='".route('permissions.edit', [$datum->id])."' title='Edit' onclick='$.rails.handleRemote($(this)); return false;'><i class='feather-edit-2 text-white'></i></a>",
                     "<a class='btn btn-xs btn-danger' data-remote='true' href='".route('permissions.destroy', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='delete' data-confirm='Apakah Anda yakin akan menghapus data ini?' title='Delete' onclick='if ($.rails.allowAction($(this))) $.rails.handleRemote($(this)); return false;'><i class='feather-trash-2 text-white'></i></a>",
-                ]);
+                ]));
 
                 return $datum;
             });

@@ -1,6 +1,9 @@
 @push('scripts')
     <script>
-        const loginHot = new HandsontableWrapper('login', {
+        const loginHot = new HandsontableWrapper({
+            tableId: 'login',
+            title: 'Log Pengguna (Login)',
+        }, {
             columns: [
                 { data: 'created_at', title: 'Waktu Transaksi', type: 'date', dateFormat: 'DD-MM-YYYY HH.mm.ss' },
                 { data: 'username', title: 'Username' },

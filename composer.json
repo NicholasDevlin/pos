@@ -12,6 +12,8 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "livewire/livewire": "^3.5",
+        "maatwebsite/excel": "^3.1",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-html": "^3.4",
         "spatie/laravel-permission": "^6.3"

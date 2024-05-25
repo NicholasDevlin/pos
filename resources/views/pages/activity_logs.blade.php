@@ -40,7 +40,9 @@
 
 @push('scripts')
     <script>
-        const hot = new HandsontableWrapper('activity_logs', {
+        const hot = new HandsontableWrapper({
+            tableId: 'activity_logs',
+        }, {
             columns: [
                 { data: 'created_at_frmt', title: 'Waktu Transaksi', type: 'date', dateFormat: 'DD-MM-YYYY HH.mm.ss' },
                 { data: 'subject_type_frmt', title: 'Modul' },

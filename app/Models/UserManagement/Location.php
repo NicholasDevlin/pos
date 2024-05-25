@@ -25,7 +25,7 @@ class Location extends Model
     public function statusLabel(): string
     {
         return match ($this->status) {
-            self::STATUS_INACTIVE => '<span class="badge badge-pill badge-secondary">Tidak Aktif</span>',
+            self::STATUS_INACTIVE => '<span class="badge badge-pill badge-soft-secondary">Tidak Aktif</span>',
             self::STATUS_ACTIVE => '<span class="badge badge-pill badge-success">Aktif</span>',
             default => $this->status,
         };

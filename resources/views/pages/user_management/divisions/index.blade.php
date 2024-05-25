@@ -24,7 +24,9 @@
 
 @push('scripts')
     <script>
-        const hot = new HandsontableWrapper('divisions', {
+        const hot = new HandsontableWrapper({
+            tableId: 'divisions',
+        }, {
             columns: [
                 { data: 'actions', renderer: 'html' },
                 { data: 'id', title: 'ID' },

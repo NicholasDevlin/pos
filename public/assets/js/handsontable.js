@@ -1,7 +1,9 @@
 class HandsontableWrapper {
-    constructor(tableId, options = {}) {
+    constructor({ tableId, programName = null, title = $('.header-title').text()}, options = {}) {
         this.tableId = tableId;
+        this.programName = programName;
         this.options = options;
+        this.title = title;
 
         this.#createTableWrapper();
         this.#createTableContainer();
@@ -37,22 +39,142 @@ class HandsontableWrapper {
     }
 
     #createTableStatusBar() {
-        const statusBar = document.createElement('div');
-        statusBar.id = this.tableStatusBar;
-        statusBar.style.cssText = `
-            font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Helvetica Neue,Arial,sans-serif;
-            font-size: 13px;
-            margin-top: 0.75em;
+        const statusBar = `
+            <div style="display: flex; justify-content: space-between;">
+                <div id="${this.tableStatusBar}" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Helvetica Neue,Arial,sans-serif; font-size: 13px; margin-top: 0.75em;">
+                    Showing <span class="filtered"></span> of <span class="total"></span> entries.
+                </div>
+                <button class="btn btn-success mt-2" id="export-button-${this.tableId}" type="button">
+                    <i class="fa fa-table mr-1"></i> Export Excel
+                </button>
+            </div>
         `;
-        statusBar.innerHTML = `Showing <span class="filtered"></span> of <span class="total"></span> entries.`;
 
-        document.getElementById(this.tableWrapper).appendChild(statusBar);
+        document.getElementById(this.tableWrapper).innerHTML += statusBar;
+    }
+
+    attachExportButtonEvent(hot) {
+        const wrapper = this;
+
+        const columnDelimiter = '|~|';
+        const rowDelimiter = '\r\n';
+
+        $(`#export-button-${this.tableId}`).on('click', function() {
+            let hidePlugin;
+
+            if (hot.colToProp(0) === 'actions') {
+                hidePlugin = hot.getPlugin('hiddenColumns');
+                hidePlugin.hideColumn(0);
+            }
+
+            const rowsString = hot
+                .getPlugin('exportFile')
+                .exportAsString('csv', {
+                    bom: false,
+                    columnDelimiter,
+                    columnHeaders: true,
+                    exportHiddenColumns: false,
+                    exportHiddenRows: false,
+                    rowDelimiter,
+                    rowHeaders: false,
+                })
+                .trim()
+                .split(rowDelimiter);
+
+            const rowsArray = rowsString.map((row) => {
+                return row.trim().split(columnDelimiter).map((value) => {
+                    if (wrapper.checkIsContainsHTMLTag(value)) {
+                        const tempElement = document.createElement('div');
+
+                        // Set the inner HTML of the temporary element
+                        tempElement.innerHTML = value;
+
+                        value = Array.from(tempElement.children).map((child) => {
+                            return child.textContent || child.innerText;
+                        }).join(', ');
+                    }
+
+                    return value.trim().replace(/"/g, '');
+                });
+            });
+
+            const columnWidths = [];
+            const rowsArrayFormatted = rowsArray.map((row, rowIndex) => {
+                Object.keys(row).map((column) => {
+                    const value = row[column] ?? '';
+
+                    columnWidths[column] = Math.max(columnWidths[column] ?? 0, value.length + 4);
+                })
+
+                if (rowIndex === 0) {
+                    return row.map((value) => {
+                        return {
+                            v: value,
+                            t: 's',
+                            s: {
+                                font: { bold: true },
+                                fill: { bgColor: { rgb: 'FFFF00' }, fgColor: { rgb: 'FFFF00' } },
+                                alignment: { horizontal: 'center', vertical: 'center' },
+                                border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } },
+                            },
+                        };
+                    });
+                } else {
+                    return row.map((value) => {
+                        return {
+                            v: value,
+                            t: 's',
+                            s: {
+                                alignment: { horizontal: 'center', vertical: 'center' },
+                                border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } },
+                            },
+                        };
+                    });
+                }
+            });
+
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.aoa_to_sheet([
+                [{
+                    v: `  ${wrapper.title}`,
+                    t: 's',
+                    s: {
+                        font: { sz: 18, bold: true },
+                        alignment: { vertical: 'center' },
+                    },
+                }],
+                ...rowsArrayFormatted,
+            ]);
+            worksheet["!cols"] = columnWidths.map((width) => ({ width }));
+
+            const ROW_1_INDEX = 0;
+            const ROW_2_INDEX = 1;
+
+            /* create !rows array if it does not exist */
+            if(!worksheet["!rows"]) worksheet["!rows"] = [];
+
+            /* create row metadata object if it does not exist */
+            if(!worksheet["!rows"][ROW_1_INDEX]) worksheet["!rows"][ROW_1_INDEX] = { hpx: 37.5 };
+            if(!worksheet["!rows"][ROW_2_INDEX]) worksheet["!rows"][ROW_2_INDEX] = { hpx: 22.5 };
+
+            XLSX.utils.book_append_sheet(workbook, worksheet, wrapper.title);
+
+            XLSX.writeFile(workbook, `${wrapper.title}${wrapper.programName !== null ? ' [' + wrapper.programName + ']' : ''} - ${new Date(Date.now() + (7 * 60 * 60 * 1000)).toISOString().replace(/[-T:Z.]/g, '').slice(0, 14)}.xlsx`, { compression: true });
+
+            if (hot.colToProp(0) === 'actions') {
+                hidePlugin.showColumn(0);
+            }
+        });
+    }
+
+    checkIsContainsHTMLTag(str) {
+        return /<[a-z][\s\S]*>/i.test(str);
     }
 
     build() {
         const wrapper = this;
 
-        return new Handsontable(document.getElementById(this.tableContainer), {
+        const hot = new Handsontable(document.getElementById(this.tableContainer), {
             className: 'htMiddle',
             height: '90vh',
             rowHeights: 35,
@@ -98,6 +220,10 @@ class HandsontableWrapper {
             },
             ...this.options,
         });
+
+        this.attachExportButtonEvent(hot);
+
+        return hot;
     }
 }
 
