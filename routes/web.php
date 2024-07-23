@@ -26,7 +26,7 @@ Route::get('/', function () {
     return redirect('login');
 });
 
-Route::group(['middleware' => ['prevent-back-history', 'auth']], function () {
+Route::group(['middleware' => ['prevent-back-history', 'auth', 'show-debugbar']], function () {
     Route::group(['controller' => PageController::class], function () {
         Route::get('/dashboard', 'dashboard')->name('dashboard');
         Route::get('/user/password', 'editUserPassword')->name('user-password.edit');
