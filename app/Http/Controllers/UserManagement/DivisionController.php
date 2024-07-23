@@ -64,7 +64,7 @@ class DivisionController extends Controller
      */
     public function store(DivisionRequest $request)
     {
-        Division::create($request->all());
+        Division::create($request->validated());
 
         session()->flash('success', 'Data berhasil disimpan!');
 
@@ -94,7 +94,7 @@ class DivisionController extends Controller
      */
     public function update(DivisionRequest $request, Division $division)
     {
-        $division->update($request->all());
+        $division->update($request->validated());
 
         session()->flash('success', 'Data berhasil di-update!');
 

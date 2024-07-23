@@ -66,7 +66,7 @@ class PermissionController extends Controller
      */
     public function store(PermissionRequest $request)
     {
-        Permission::create($request->all());
+        Permission::create($request->validated());
 
         session()->flash('success', 'Data berhasil disimpan!');
 
@@ -96,7 +96,7 @@ class PermissionController extends Controller
      */
     public function update(PermissionRequest $request, Permission $permission)
     {
-        $permission->update($request->all());
+        $permission->update($request->validated());
 
         session()->flash('success', 'Data berhasil di-update!');
 

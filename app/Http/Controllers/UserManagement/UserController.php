@@ -78,7 +78,7 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
-            $input = $request->all();
+            $input = $request->validated();
             $input['password'] = Hash::make($input['password']);
 
             $roles = $input['roles'] ?? [];

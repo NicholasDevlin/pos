@@ -64,7 +64,7 @@ class LocationController extends Controller
      */
     public function store(LocationRequest $request)
     {
-        Location::create($request->all());
+        Location::create($request->validated());
 
         session()->flash('success', 'Data berhasil disimpan!');
 
@@ -94,7 +94,7 @@ class LocationController extends Controller
      */
     public function update(LocationRequest $request, Location $location)
     {
-        $location->update($request->all());
+        $location->update($request->validated());
 
         session()->flash('success', 'Data berhasil di-update!');
 

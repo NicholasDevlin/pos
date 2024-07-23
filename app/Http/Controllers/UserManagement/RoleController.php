@@ -77,7 +77,7 @@ class RoleController extends Controller
         DB::beginTransaction();
 
         try {
-            $input = $request->all();
+            $input = $request->validated();
 
             $permissions = $input['permissions'] ?? [];
             $logScopes = $input['log_scopes'] ?? [];
@@ -156,7 +156,7 @@ class RoleController extends Controller
         DB::beginTransaction();
 
         try {
-            $input = $request->all();
+            $input = $request->validated();
 
             $permissions = $input['permissions'] ?? [];
             $logScopes = $input['log_scopes'] ?? [];

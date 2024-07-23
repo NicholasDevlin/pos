@@ -128,7 +128,7 @@ class LogHelper
                 ->all();
         }
 
-        return Division::where('status', Location::STATUS_ACTIVE)->pluck('name', 'id')->all();
+        return Division::where('status', Division::STATUS_ACTIVE)->pluck('name', 'id')->all();
     }
 
     public static function getLocationsDivisions($user = null): array

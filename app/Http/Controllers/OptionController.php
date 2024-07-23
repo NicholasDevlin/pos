@@ -63,7 +63,7 @@ class OptionController extends Controller
      */
     public function store(OptionRequest $request)
     {
-        Option::create($request->all());
+        Option::create($request->validated());
 
         session()->flash('success', 'Data berhasil disimpan!');
 
@@ -93,7 +93,7 @@ class OptionController extends Controller
      */
     public function update(OptionRequest $request, Option $option)
     {
-        $option->update($request->all());
+        $option->update($request->validated());
 
         session()->flash('success', 'Data berhasil di-update!');
 
