@@ -20,7 +20,7 @@ trait HasScope
             $routeName = self::mapTableNameToRouteName($tableName);
 
             foreach (array_keys(self::$scopes[$routeName] ?? []) as $permission) {
-                if (Auth::user()->can("{$routeName}.show.{$permission}")) {
+                if (Auth::user()->can("$routeName.show.$permission")) {
                     return self::getScopeFilter($builder, self::$scopes[$routeName][$permission], Auth::user());
                 }
             }
@@ -61,7 +61,7 @@ trait HasScope
         $routeName = $module ?: explode('.', Request::route()->getName())[0];
 
         foreach (array_keys(self::$scopes[$routeName] ?? []) as $permission) {
-            if (Auth::user()->can("{$routeName}.show.{$permission}")) {
+            if (Auth::user()->can("$routeName.show.$permission")) {
                 return $this->getScopeData(self::$scopes[$routeName][$permission], Auth::user());
             }
         }

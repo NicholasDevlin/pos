@@ -153,7 +153,7 @@ class LogHelper
 
         foreach ($locations as $locationKey => $location) {
             foreach ($divisions as $divisionKey => $division) {
-                $data["{$locationKey}-{$divisionKey}"] = "$location | $division";
+                $data["$locationKey-$divisionKey"] = "$location | $division";
             }
         }
 
