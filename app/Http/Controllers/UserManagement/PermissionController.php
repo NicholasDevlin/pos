@@ -4,9 +4,9 @@ namespace App\Http\Controllers\UserManagement;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserManagement\PermissionRequest;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
@@ -23,7 +23,7 @@ class PermissionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): Renderable|Collection
+    public function index(Request $request): View|Collection
     {
         if ($request->ajax()) {
             return $this->tableData();
@@ -54,7 +54,7 @@ class PermissionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Renderable
+    public function create(): View
     {
         $permission = new Permission;
 
@@ -76,7 +76,7 @@ class PermissionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Permission $permission): Renderable
+    public function show(Permission $permission): View
     {
         $permission = Permission::with('roles:id,name,notes', 'roles.users:username,name')->find($permission->id);
 
@@ -86,7 +86,7 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Permission $permission): Renderable
+    public function edit(Permission $permission): View
     {
         return view('pages.user_management.permissions.edit', compact('permission'));
     }

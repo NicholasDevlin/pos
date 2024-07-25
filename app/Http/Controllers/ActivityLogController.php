@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Helpers\LogHelper;
 use App\Models\User;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\View\View;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
@@ -23,7 +23,7 @@ class ActivityLogController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request): Renderable|Collection
+    public function __invoke(Request $request): View|Collection
     {
         if ($request->ajax()) {
             return $this->tableData();

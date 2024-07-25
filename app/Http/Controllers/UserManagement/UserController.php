@@ -7,12 +7,12 @@ use App\Http\Requests\UserManagement\UserRequest;
 use App\Models\User;
 use App\Models\UserManagement\Division;
 use App\Models\UserManagement\Location;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -28,7 +28,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): Renderable|Collection
+    public function index(Request $request): View|Collection
     {
         if ($request->ajax()) {
             return $this->tableData();
@@ -57,7 +57,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Renderable
+    public function create(): View
     {
         $user = new User;
 
@@ -117,7 +117,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user): Renderable
+    public function show(User $user): View
     {
         $roles = Role::pluck('notes', 'name')->all();
         $locations = Location::where('status', Location::STATUS_ACTIVE)->pluck('name', 'id')->all();
@@ -136,7 +136,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user): Renderable
+    public function edit(User $user): View
     {
         $statusList = User::statusList();
 

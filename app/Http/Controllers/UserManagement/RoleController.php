@@ -5,11 +5,11 @@ namespace App\Http\Controllers\UserManagement;
 use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserManagement\RoleRequest;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -26,7 +26,7 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): Renderable|Collection
+    public function index(Request $request): View|Collection
     {
         if ($request->ajax()) {
             return $this->tableData();
@@ -57,7 +57,7 @@ class RoleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Renderable
+    public function create(): View
     {
         $role = new Role;
 
@@ -109,7 +109,7 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Role $role): Renderable
+    public function show(Role $role): View
     {
         $permissions = Permission::pluck('notes', 'name')
             ->groupBy(fn ($item, $key) => explode('.', $key)[0], true);
@@ -130,7 +130,7 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Role $role): Renderable
+    public function edit(Role $role): View
     {
         $permissions = Permission::pluck('notes', 'name')
             ->groupBy(fn ($item, $key) => explode('.', $key)[0], true);

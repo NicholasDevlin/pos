@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OptionRequest;
 use App\Models\Option;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\View\View;
 
 class OptionController extends Controller
 {
@@ -22,7 +22,7 @@ class OptionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): Renderable|Collection
+    public function index(Request $request): View|Collection
     {
         if ($request->ajax()) {
             return $this->tableData();
@@ -50,7 +50,7 @@ class OptionController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Renderable
+    public function create(): View
     {
         $option = new Option;
         $statusList = Option::statusList();
@@ -81,7 +81,7 @@ class OptionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Option $option): Renderable
+    public function edit(Option $option): View
     {
         $statusList = Option::statusList();
 

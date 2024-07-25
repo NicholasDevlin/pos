@@ -5,9 +5,9 @@ namespace App\Http\Controllers\UserManagement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserManagement\LocationRequest;
 use App\Models\UserManagement\Location;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\View\View;
 
 class LocationController extends Controller
 {
@@ -23,7 +23,7 @@ class LocationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): Renderable|Collection
+    public function index(Request $request): View|Collection
     {
         if ($request->ajax()) {
             return $this->tableData();
@@ -51,7 +51,7 @@ class LocationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Renderable
+    public function create(): View
     {
         $location = new Location;
         $statusList = Location::statusList();
@@ -82,7 +82,7 @@ class LocationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Location $location): Renderable
+    public function edit(Location $location): View
     {
         $statusList = Location::statusList();
 
