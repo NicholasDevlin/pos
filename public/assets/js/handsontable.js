@@ -1,5 +1,5 @@
 class HandsontableWrapper {
-    constructor({ tableId, programName = null, title = $('.header-title').text()}, options = {}) {
+    constructor({ tableId, programName = null, title = $('.header-title').text() }, options = {}) {
         this.tableId = tableId;
         this.programName = programName;
         this.options = options;
@@ -44,7 +44,7 @@ class HandsontableWrapper {
                 <div id="${this.tableStatusBar}" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Helvetica Neue,Arial,sans-serif; font-size: 13px; margin-top: 0.75em;">
                     Showing <span class="filtered"></span> of <span class="total"></span> entries.
                 </div>
-                <button class="btn btn-success mt-2" id="export-button-${this.tableId}" type="button">
+                <button class="btn btn-sm btn-light mt-2" style="color: #56677d;" id="export-button-${this.tableId}" type="button">
                     <i class="fa fa-table mr-1"></i> Export Excel
                 </button>
             </div>
@@ -151,11 +151,11 @@ class HandsontableWrapper {
             const ROW_2_INDEX = 1;
 
             /* create !rows array if it does not exist */
-            if(!worksheet["!rows"]) worksheet["!rows"] = [];
+            if (!worksheet["!rows"]) worksheet["!rows"] = [];
 
             /* create row metadata object if it does not exist */
-            if(!worksheet["!rows"][ROW_1_INDEX]) worksheet["!rows"][ROW_1_INDEX] = { hpx: 37.5 };
-            if(!worksheet["!rows"][ROW_2_INDEX]) worksheet["!rows"][ROW_2_INDEX] = { hpx: 22.5 };
+            if (!worksheet["!rows"][ROW_1_INDEX]) worksheet["!rows"][ROW_1_INDEX] = { hpx: 37.5 };
+            if (!worksheet["!rows"][ROW_2_INDEX]) worksheet["!rows"][ROW_2_INDEX] = { hpx: 22.5 };
 
             XLSX.utils.book_append_sheet(workbook, worksheet, wrapper.title);
 

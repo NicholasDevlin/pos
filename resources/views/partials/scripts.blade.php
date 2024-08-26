@@ -17,7 +17,8 @@
 <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
 
 <script src="{{ asset('assets/plugins/toastr/build/toastr.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/table-to-excel/dist/tableToExcel.js') }}"></script>
+<script defer src="{{ asset('assets/plugins/alpine/packages/mask/dist/cdn.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/table-to-excel-by-linways/dist/tableToExcel.js') }}"></script>
 <script src="{{ asset('assets/plugins/xlsx-js-style/dist/xlsx.bundle.js') }}"></script>
 
 <script>

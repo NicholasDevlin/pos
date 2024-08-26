@@ -4,14 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Helpers\LogHelper;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogController extends Controller
 {
+    const fixed_date_options = [
+        '1' => 'kemarin',
+        '3' => 'tiga hari yang lalu',
+        '7' => 'seminggu yang lalu',
+        '14' => 'dua minggu yang lalu',
+        '31' => 'sebulan yang lalu',
+    ];
+
     /**
      * Create a new controller instance.
      */
@@ -26,14 +36,57 @@ class ActivityLogController extends Controller
     public function __invoke(Request $request): View|Collection
     {
         if ($request->ajax()) {
-            return $this->tableData();
+            $this->prepareRequest($request);
+
+            return $this->tableData($request->only(['start_date', 'end_date']));
         }
 
-        return view('pages.activity_logs');
+        return view('pages.activity_logs', [
+            'fixedDateOptions' => self::fixed_date_options,
+        ]);
     }
 
-    private function tableData(): Collection
+    private function prepareRequest(Request $request)
     {
+        $dateOption = $request->input('date_option');
+
+        switch ($dateOption) {
+            case 'fixed':
+                $date = $request->input('fixed_date');
+                if ($date) {
+                    $start_date = Carbon::now()->subDays($date)->startOfDay()->format('Y-m-d H:i:s');
+                    $end_date = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+
+                    $request->merge(compact('start_date', 'end_date'));
+                }
+
+                break;
+            case 'relative':
+                $date = $request->input('relative_date');
+                if ($date) {
+                    [$start_date, $end_date] = explode(' - ', $date);
+                    $start_date = Carbon::createFromFormat('d-m-Y', $start_date)->startOfDay()->format('Y-m-d H:i:s');
+                    $end_date = Carbon::createFromFormat('d-m-Y', $end_date)->endOfDay()->format('Y-m-d H:i:s');
+
+                    $request->merge(compact('start_date', 'end_date'));
+                }
+
+                break;
+        }
+
+        $request->validate([
+            'date_option' => ['required', Rule::in(['fixed', 'relative'])],
+            'fixed_date' => ['required_if:date_option,fixed', Rule::in(array_keys(self::fixed_date_options))],
+            'relative_date' => ['required_if:date_option,relative', 'string'],
+            'start_date' => ['required', 'date', 'date_format:Y-m-d H:i:s'],
+            'end_date' => ['required', 'date', 'date_format:Y-m-d H:i:s'],
+        ]);
+    }
+
+    private function tableData($range): Collection
+    {
+        ['start_date' => $startDate, 'end_date' => $endDate] = $range;
+
         return $this->getActivityScopes(
             Activity::query()
                 ->joinSub(User::select('id', 'username'), 'users', function ($join) {
@@ -42,6 +95,7 @@ class ActivityLogController extends Controller
                 ->orderByDesc('activity_log.created_at')
                 ->select('activity_log.*', 'users.username')
         )
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->get()
             ->setVisible(['subject_type_frmt', 'event_frmt', 'subject_id', 'username', 'changes_frmt', 'created_at_frmt'])
             ->map(function ($datum) {
@@ -71,7 +125,7 @@ CASE
     WHEN JSON_VALUE(properties, '$.scope.division_id') IS NOT NULL THEN
         JSON_VALUE(properties, '$.scope.division_id') IN
         (SELECT DISTINCT division_id FROM model_has_scopes WHERE model_id = ?)
-    ELSE FALSE
+    ELSE TRUE
 END
 WHERE, array_fill(0, 3, auth()->user()->id))
                 ->whereIn('subject_type', function ($query) {

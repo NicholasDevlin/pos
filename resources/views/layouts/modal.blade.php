@@ -1,4 +1,4 @@
-<div class="modal-dialog">
+<div class="modal-dialog @yield('size')">
     <div class="modal-content">
         @yield('start')
 
@@ -12,8 +12,12 @@
             @yield('content')
         </div>
         <div class="modal-footer">
-            <button class="btn btn-secondary" data-dismiss="modal" type="button">Tutup</button>
-            @yield('footer')
+            @yield('left-footer')
+
+            <div class="ml-auto">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Tutup</button>
+                @yield('footer')
+            </div>
         </div>
 
         @yield('end')
