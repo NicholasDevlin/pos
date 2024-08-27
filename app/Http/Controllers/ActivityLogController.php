@@ -36,9 +36,16 @@ class ActivityLogController extends Controller
     public function __invoke(Request $request): View|Collection
     {
         if ($request->ajax()) {
-            $this->prepareRequest($request);
+            if ($request->input('all') === 'true') {
+                return $this->tableData([
+                    'start_date' => Carbon::createFromFormat('Y-m-d', '1970-01-01')->format('Y-m-d H:i:s'),
+                    'end_date' => Carbon::now()->endOfDay()->format('Y-m-d H:i:s'),
+                ]);
+            } else {
+                $this->prepareRequest($request);
 
-            return $this->tableData($request->only(['start_date', 'end_date']));
+                return $this->tableData($request->only(['start_date', 'end_date']));
+            }
         }
 
         return view('pages.activity_logs', [
@@ -83,7 +90,7 @@ class ActivityLogController extends Controller
         ]);
     }
 
-    private function tableData($range): Collection
+    private function tableData(array $range): Collection
     {
         ['start_date' => $startDate, 'end_date' => $endDate] = $range;
 

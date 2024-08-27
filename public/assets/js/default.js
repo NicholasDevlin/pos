@@ -4,6 +4,7 @@ $.fn.select2.defaults.set('theme', 'bootstrap4');
 $.fn.select2.defaults.set('placeholder', '');
 $.fn.select2.defaults.set('allowClear', true);
 $('.select2').select2();
+$('.select2-dynamic').select2({ tags: true });
 
 $('.multiselect').multiselect({
     buttonWidth: '100%',
