@@ -10,6 +10,8 @@ class ActivityLogHelper
     {
         $propertyName = ($event === 'deleted') ? 'old' : 'attributes';
 
+        $builder = $builder->withoutGlobalScopes();
+
         $subjectType = $builder->getModel()->getMorphClass();
         $subjects = $builder->pluck($subjectId)->all();
 
