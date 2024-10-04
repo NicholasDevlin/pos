@@ -33,6 +33,51 @@
 
     <div class="form-group mb-4">
         @php
+            $label = 'Nama Asli';
+            $name = 'real_name';
+        @endphp
+        {{ html()->label($label, $name) }}
+        <span class="text-danger">*</span>
+
+        {{ html()->text($name)->class('form-control' . ($errors->has($name) ? ' is-invalid' : '')) }}
+
+        @error($name)
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="form-group mb-4">
+        @php
+            $label = 'Nama Singkat';
+            $name = 'short_name';
+        @endphp
+        {{ html()->label($label, $name) }}
+        <span class="text-danger">*</span>
+
+        {{ html()->text($name)->class('form-control' . ($errors->has($name) ? ' is-invalid' : '')) }}
+
+        @error($name)
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="form-group mb-4">
+        @php
+            $label = 'Kode Nama';
+            $name = 'code_name';
+        @endphp
+        {{ html()->label($label, $name) }}
+        <span class="text-danger">*</span>
+
+        {{ html()->text($name)->class('form-control' . ($errors->has($name) ? ' is-invalid' : '')) }}
+
+        @error($name)
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="form-group mb-4">
+        @php
             $label = 'Keterangan';
             $name = 'notes';
         @endphp

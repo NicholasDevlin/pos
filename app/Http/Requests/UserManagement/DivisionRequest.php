@@ -28,6 +28,9 @@ class DivisionRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'real_name' => ['required', 'string', 'max:255'],
+            'short_name' => ['required', 'string', 'max:255'],
+            'code_name' => ['required', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
             'status' => ['required', Rule::in(array_keys(Division::statusList()))],
         ];
@@ -37,6 +40,9 @@ class DivisionRequest extends FormRequest
     {
         return [
             'name' => ['trim', 'escape', 'strip_tags'],
+            'real_name' => ['trim', 'escape', 'strip_tags'],
+            'short_name' => ['trim', 'escape', 'strip_tags'],
+            'code_name' => ['trim', 'escape', 'strip_tags'],
             'notes' => ['trim', 'escape', 'strip_tags'],
         ];
     }

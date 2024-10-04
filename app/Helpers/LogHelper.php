@@ -40,6 +40,9 @@ class LogHelper
         'notes' => 'Keterangan',
         'username' => 'Username',
         'password' => 'Password',
+        'real_name' => 'Nama Asli',
+        'short_name' => 'Nama Pendek',
+        'code_name' => 'Kode Nama',
     ];
 
     public static function getAllModels(): array

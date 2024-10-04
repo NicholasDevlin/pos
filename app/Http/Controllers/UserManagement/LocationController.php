@@ -35,7 +35,7 @@ class LocationController extends Controller
     private function tableData(): Collection
     {
         return Location::orderByDesc('updated_at')
-            ->get(['id', 'name', 'notes', 'status', 'created_at', 'updated_at'])
+            ->get(['id', 'name', 'real_name', 'short_name', 'code_name', 'notes', 'status', 'created_at', 'updated_at'])
             ->map(function ($datum) {
                 $datum->actions = implode(' ', array_filter([
                     "<a class='btn btn-xs btn-secondary' data-remote='true' href='".route('locations.edit', [$datum->id])."' title='Edit' onclick='$.rails.handleRemote($(this)); return false;'><i class='feather-edit-2 text-white'></i></a>",
