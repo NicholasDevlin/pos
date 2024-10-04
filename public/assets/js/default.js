@@ -11,6 +11,7 @@ $('.multiselect').multiselect({
     enableCaseInsensitiveFiltering: true,
     enableFiltering: true,
     includeSelectAllOption: true,
+    maxHeight: 400,
 });
 
 $('.thousand-separator').inputmask({

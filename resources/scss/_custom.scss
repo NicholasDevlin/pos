@@ -34,3 +34,7 @@ a[type=button] > * {
     color: black !important;
     margin-right: 20px !important;
 }
+
+.page-content {
+    min-height: 100vh;
+}
