@@ -180,7 +180,7 @@ class RoleController extends Controller
 
             DB::commit();
 
-            return redirect()->route('roles.index')->with(['success' => 'Data berhasil di-update!']);
+            return redirect()->back()->with(['success' => 'Data berhasil di-update!']);
         } catch (\Exception $e) {
             report($e);
 
