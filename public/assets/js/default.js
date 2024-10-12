@@ -22,3 +22,8 @@ $('.thousand-separator').inputmask({
     removeMaskOnSubmit: true,
     rightAlign: false,
 });
+
+window.addEventListener('toastr', (e) => {
+    const { type, message } = e.detail;
+    toastr[type](message);
+});
