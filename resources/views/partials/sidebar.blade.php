@@ -1,6 +1,6 @@
 <div class="vertical-menu">
     <div class="h-100" data-simplebar>
-        <div class="navbar-brand-box">
+        <div class="navbar-brand-box mt-3">
             <a class="logo" href="/">
                 <span>
                     <img src="{{ asset('assets/images/logo.png') }}" alt="" height="30">
