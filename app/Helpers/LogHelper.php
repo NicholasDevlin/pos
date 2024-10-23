@@ -45,33 +45,36 @@ class LogHelper
         'code_name' => 'Kode Nama',
     ];
 
-    public static function getAllModels(): array
+    public static function getAllModels($mapModelToLogName = true): array
     {
         $composer = json_decode(file_get_contents(base_path('composer.json')), true);
         $models = [];
 
         foreach ((array) data_get($composer, 'autoload.psr-4') as $namespace => $path) {
-            $models = array_merge(collect(File::allFiles(base_path($path)))
+            $currentModels = collect(File::allFiles(base_path($path)))
                 ->map(function ($item) use ($namespace) {
                     $path = $item->getRelativePathName();
 
                     return sprintf('%s%s',
                         $namespace,
-                        strtr(substr($path, 0, strrpos($path, '.')), '/', '\\'));
+                        strtr(substr($path, 0, strrpos($path, '.')), '/', '\\'),
+                    );
                 })
                 ->filter(function ($class) {
-                    $valid = false;
-
-                    if (class_exists($class) && ! in_array($class, static::exclusions)) {
-                        $reflection = new \ReflectionClass($class);
-                        $valid = $reflection->isSubclassOf(\Illuminate\Database\Eloquent\Model::class) &&
-                            ! $reflection->isAbstract();
+                    if (! class_exists($class) || in_array($class, static::exclusions)) {
+                        return false;
                     }
 
-                    return $valid;
-                })
-                ->map(fn ($model) => self::mapModelToLogName($model))
-                ->all(), $models);
+                    $reflection = new \ReflectionClass($class);
+
+                    return $reflection->isSubclassOf(\Illuminate\Database\Eloquent\Model::class) && ! $reflection->isAbstract();
+                });
+
+            if ($mapModelToLogName) {
+                $currentModels = $currentModels->map(fn ($model) => static::mapModelToLogName($model));
+            }
+
+            $models = array_merge($currentModels->all(), $models);
         }
 
         return $models;

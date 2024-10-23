@@ -30,6 +30,12 @@ Route::group(['middleware' => ['prevent-back-history', 'auth', 'show-debugbar']]
     Route::group(['controller' => PageController::class], function () {
         Route::get('/dashboard', 'dashboard')->name('dashboard');
         Route::get('/user/password', 'editUserPassword')->name('user-password.edit');
+
+        Route::group(['prefix' => 'data-initiation'], function () {
+            Route::get('/', 'dataInitiationIndex')->name('data-initiation.index');
+            Route::post('/download-template', 'dataInitiationDownloadTemplate')->name('data-initiation.download-template');
+            Route::post('/import', 'dataInitiationImport')->name('data-initiation.import');
+        });
     });
 
     Route::resource('options', OptionController::class);

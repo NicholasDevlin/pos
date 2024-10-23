@@ -38,6 +38,7 @@
 
                     @role('super-admin')
                         <li><a href="{{ route('options.index') }}"><i class="feather-settings"></i><span>Konfigurasi</span></a></li>
+                        <li><a href="{{ route('data-initiation.index') }}"><i class="feather-hard-drive"></i><span>Inisialisasi Data</span></a></li>
                     @endrole
 
                     @canany(['logs.show.all', 'logs.show.scope', 'logs.show.own'])
