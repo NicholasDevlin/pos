@@ -16,6 +16,10 @@
             cursor: text;
         }
     }
+
+    .btn i {
+        pointer-events: none;
+    }
 }
 
 a[type=button] > * {

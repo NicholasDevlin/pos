@@ -38,8 +38,8 @@ class LocationController extends Controller
             ->get(['id', 'name', 'real_name', 'short_name', 'code_name', 'notes', 'status', 'created_at', 'updated_at'])
             ->map(function ($datum) {
                 $datum->actions = implode(' ', array_filter([
-                    "<a class='btn btn-xs btn-secondary' data-remote='true' href='".route('locations.edit', [$datum->id])."' title='Edit' onclick='$.rails.handleRemote($(this)); return false;'><i class='feather-edit-2 text-white'></i></a>",
-                    "<a class='btn btn-xs btn-danger' data-remote='true' href='".route('locations.destroy', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='delete' data-confirm='Apakah Anda yakin akan menghapus data ini?' title='Delete' onclick='if ($.rails.allowAction($(this))) $.rails.handleRemote($(this)); return false;'><i class='feather-trash-2 text-white'></i></a>",
+                    "<a class='btn btn-xs btn-secondary' data-remote='true' href='".route('locations.edit', [$datum->id])."' title='Edit'><i class='feather-edit-2 text-white'></i></a>",
+                    "<a class='btn btn-xs btn-danger' data-remote='true' href='".route('locations.destroy', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='delete' data-confirm='Apakah Anda yakin akan menghapus data ini?' title='Delete'><i class='feather-trash-2 text-white'></i></a>",
                 ]));
 
                 $datum->status = $datum->statusLabel();

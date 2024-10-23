@@ -45,7 +45,7 @@ class UserController extends Controller
                 $datum->actions = implode(' ', array_filter([
                     "<a class='btn btn-xs btn-primary' href='".route('users.show', [$datum->id])."' title='Show'><i class='feather-eye text-white'></i></a>",
                     "<a class='btn btn-xs btn-secondary' href='".route('users.edit', [$datum->id])."' title='Edit'><i class='feather-edit-2 text-white'></i></a>",
-                    "<a class='btn btn-xs btn-danger' data-remote='true' href='".route('users.destroy', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='delete' data-confirm='Apakah Anda yakin akan menghapus data ini?' title='Delete' onclick='if ($.rails.allowAction($(this))) $.rails.handleRemote($(this)); return false;'><i class='feather-trash-2 text-white'></i></a>",
+                    "<a class='btn btn-xs btn-danger' data-remote='true' href='".route('users.destroy', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='delete' data-confirm='Apakah Anda yakin akan menghapus data ini?' title='Delete'><i class='feather-trash-2 text-white'></i></a>",
                 ]));
 
                 $datum->status = $datum->statusLabel();

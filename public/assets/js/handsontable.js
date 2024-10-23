@@ -86,12 +86,18 @@ class HandsontableWrapper {
                     if (wrapper.checkIsContainsHTMLTag(value)) {
                         const tempElement = document.createElement('div');
 
+                        let separator = ', ';
+                        if (value.includes('<br>')) {
+                            separator = '\n';
+                            value = value.replace(/<br>/g, '');
+                        }
+
                         // Set the inner HTML of the temporary element
                         tempElement.innerHTML = value;
 
                         value = Array.from(tempElement.children).map((child) => {
                             return child.textContent || child.innerText;
-                        }).join(', ');
+                        }).join(separator);
                     }
 
                     return value.trim().replace(/"/g, '');
@@ -99,11 +105,20 @@ class HandsontableWrapper {
             });
 
             const columnWidths = [];
+            const wrapTextColumnNumbers = [];
             const rowsArrayFormatted = rowsArray.map((row, rowIndex) => {
                 Object.keys(row).map((column) => {
                     const value = row[column] ?? '';
 
-                    columnWidths[column] = Math.max(columnWidths[column] ?? 0, value.length + 4);
+                    let currentMaxValue = value.length;
+                    if (value.includes('\n')) {
+                        wrapTextColumnNumbers.push(parseInt(column) + 1);
+
+                        const valueWithLineBreaks = value.split('\n');
+                        currentMaxValue = Math.max(...valueWithLineBreaks.map((item) => item.length));
+                    }
+
+                    columnWidths[column] = Math.max(columnWidths[column] ?? 0, currentMaxValue + 4);
                 })
 
                 if (rowIndex === 0) {
@@ -147,6 +162,8 @@ class HandsontableWrapper {
             ]);
             worksheet["!cols"] = columnWidths.map((width) => ({ width }));
 
+            wrapper.setWrapTextForColumns(worksheet, [...new Set(wrapTextColumnNumbers)]);
+
             const ROW_1_INDEX = 0;
             const ROW_2_INDEX = 1;
 
@@ -169,6 +186,44 @@ class HandsontableWrapper {
 
     checkIsContainsHTMLTag(str) {
         return /<[a-z][\s\S]*>/i.test(str);
+    }
+
+    setWrapTextForColumns(ws, columns) {
+        const range = XLSX.utils.decode_range(ws['!ref']); // Get the worksheet range
+
+        // Iterate through specified columns
+        columns.forEach((col) => {
+            const columnString = this.convertNumberToExcelColumn(col);
+
+            for (let row = range.s.r + 2; row <= range.e.r; row++) { // Do not include header row
+                const cellPosition = `${columnString}${row + 1}`;
+
+                // Check if the cell exists
+                if (ws[cellPosition]) {
+                    if (!ws[cellPosition].s) {
+                        ws[cellPosition].s = {}; // Ensure the style object exists
+                    }
+                    // Set wrapText to true
+                    ws[cellPosition].s.alignment = {
+                        ...ws[cellPosition].s.alignment,
+                        wrapText: true,
+                    };
+                }
+            }
+        });
+    }
+
+    convertNumberToExcelColumn(num) {
+        let column = '';
+        let temp;
+
+        while (num > 0) {
+            temp = (num - 1) % 26;
+            column = String.fromCharCode(temp + 65) + column; // 65 is the char code for 'A'
+            num = Math.floor((num - temp) / 26);
+        }
+
+        return column;
     }
 
     build() {
@@ -202,6 +257,7 @@ class HandsontableWrapper {
             beforeOnCellMouseDown: function (e, coords, td) {
                 if (td.className.includes('htDimmed')) {
                     e.stopImmediatePropagation();
+                    e.preventDefault();
                 }
 
                 if (['A', 'BUTTON'].includes(e.targetTouches?.[0].target.tagName)) {
@@ -217,6 +273,12 @@ class HandsontableWrapper {
             },
             afterFilter: function () {
                 document.querySelector(`#${wrapper.tableStatusBar} .filtered`).innerHTML = this.countRows();
+            },
+            afterRender: function () {
+                $('[data-remote]').off('click').on('click', function () {
+                    if ($.rails.allowAction($(this))) $.rails.handleRemote($(this));
+                    return false;
+                });
             },
             ...this.options,
         });
