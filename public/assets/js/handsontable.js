@@ -275,7 +275,7 @@ class HandsontableWrapper {
                 document.querySelector(`#${wrapper.tableStatusBar} .filtered`).innerHTML = this.countRows();
             },
             afterRender: function () {
-                $('[data-remote]').off('click').on('click', function () {
+                $('.handsontable [data-remote]').off('click').on('click', function () {
                     if ($.rails.allowAction($(this))) $.rails.handleRemote($(this));
                     return false;
                 });

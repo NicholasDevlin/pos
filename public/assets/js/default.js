@@ -30,9 +30,7 @@ const initializePlugins = () => {
 
 initializePlugins();
 
-$(document).on('show.bs.modal', '#modal', function () {
-    initializePlugins();
-});
+document.addEventListener('load-modal-plugins', initializePlugins);
 
 window.addEventListener('toastr', (e) => {
     const { type, message } = e.detail;

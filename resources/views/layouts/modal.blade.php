@@ -22,4 +22,8 @@
 
         @yield('end')
     </div>
+
+    <script>
+        document.dispatchEvent(new Event('load-modal-plugins'));
+    </script>
 </div>
