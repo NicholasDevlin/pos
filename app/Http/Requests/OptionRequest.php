@@ -37,9 +37,9 @@ class OptionRequest extends FormRequest
     public function filters(): array
     {
         return [
-            'name' => ['trim', 'escape', 'strip_tags'],
-            'value' => ['trim', 'escape', 'strip_tags'],
-            'notes' => ['trim', 'escape', 'strip_tags'],
+            'name' => ['trim', 'strip_tags'],
+            'value' => ['trim', 'strip_tags'],
+            'notes' => ['trim', 'strip_tags'],
         ];
     }
 

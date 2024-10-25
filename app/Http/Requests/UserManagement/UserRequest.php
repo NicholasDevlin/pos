@@ -57,8 +57,8 @@ class UserRequest extends FormRequest
     public function filters(): array
     {
         return [
-            'name' => ['trim', 'escape', 'strip_tags'],
-            'username' => ['trim', 'escape', 'strip_tags'],
+            'name' => ['trim', 'strip_tags'],
+            'username' => ['trim', 'strip_tags'],
         ];
     }
 }

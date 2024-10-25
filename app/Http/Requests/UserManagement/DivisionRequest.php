@@ -39,11 +39,11 @@ class DivisionRequest extends FormRequest
     public function filters(): array
     {
         return [
-            'name' => ['trim', 'escape', 'strip_tags'],
-            'real_name' => ['trim', 'escape', 'strip_tags'],
-            'short_name' => ['trim', 'escape', 'strip_tags'],
-            'code_name' => ['trim', 'escape', 'strip_tags'],
-            'notes' => ['trim', 'escape', 'strip_tags'],
+            'name' => ['trim', 'strip_tags'],
+            'real_name' => ['trim', 'strip_tags'],
+            'short_name' => ['trim', 'strip_tags'],
+            'code_name' => ['trim', 'strip_tags'],
+            'notes' => ['trim', 'strip_tags'],
         ];
     }
 

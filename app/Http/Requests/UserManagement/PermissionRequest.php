@@ -33,8 +33,8 @@ class PermissionRequest extends FormRequest
     public function filters(): array
     {
         return [
-            'name' => ['trim', 'escape', 'strip_tags'],
-            'notes' => ['trim', 'escape', 'strip_tags'],
+            'name' => ['trim', 'strip_tags'],
+            'notes' => ['trim', 'strip_tags'],
         ];
     }
 
