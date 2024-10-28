@@ -282,7 +282,7 @@ class HandsontableWrapper {
                 document.querySelector(`#${wrapper.tableStatusBar} .filtered`).innerHTML = this.countRows();
             },
             afterRender: () => this.reloadUjs(),
-            afterScrollVertically: () => this.reloadUjs(),
+            afterScroll: () => this.reloadUjs(),
             ...this.options,
         });
 
