@@ -6,7 +6,7 @@ use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogHelper
 {
-    private static function createActivityLogs($builder, $event, $attributeColumns, $subjectId): void
+    private static function createActivityLogs($builder, $event, $attributeColumns, $subjectId, $scopeColumns): void
     {
         $propertyName = ($event === 'deleted') ? 'old' : 'attributes';
 
@@ -18,8 +18,8 @@ class ActivityLogHelper
         $attributeColumns = $attributeColumns ?: $builder->getModel()->getFillable();
         $attributes = $builder->select($attributeColumns)->get()->all();
 
-        $activityLogs = array_map(function ($subject, $attribute) use ($propertyName, $subjectType, $event) {
-            $scope = array_filter($attribute->toArray(), fn ($column) => in_array($column, ['division_id', 'location_id']), ARRAY_FILTER_USE_KEY);
+        $activityLogs = array_map(function ($subject, $attribute) use ($propertyName, $subjectType, $event, $scopeColumns) {
+            $scope = array_filter($attribute->toArray(), fn ($column) => in_array($column, $scopeColumns), ARRAY_FILTER_USE_KEY);
 
             return [
                 'log_name' => 'default',
@@ -41,19 +41,19 @@ class ActivityLogHelper
         Activity::insert($activityLogs);
     }
 
-    public static function delete($builder, $attributeColumns = [], $subjectId = 'id'): void
+    public static function delete($builder, $attributeColumns = [], $subjectId = 'id', $scopeColumns = ['division_id', 'location_id']): void
     {
-        self::createActivityLogs($builder, 'deleted', $attributeColumns, $subjectId);
+        self::createActivityLogs($builder, 'deleted', $attributeColumns, $subjectId, $scopeColumns);
 
         $builder->delete();
     }
 
-    public static function insert($model, $data, $attributeColumns = [], $subjectId = 'id'): void
+    public static function insert($model, $data, $attributeColumns = [], $subjectId = 'id', $scopeColumns = ['division_id', 'location_id']): void
     {
         $uid = uniqid().session()->getId();
         $model->insert(array_map(fn ($datum) => [...$datum, 'uid' => $uid], $data));
 
         $builder = $model->where('uid', $uid);
-        self::createActivityLogs($builder, 'created', $attributeColumns, $subjectId);
+        self::createActivityLogs($builder, 'created', $attributeColumns, $subjectId, $scopeColumns);
     }
 }
