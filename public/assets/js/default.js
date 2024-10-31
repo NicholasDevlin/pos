@@ -5,17 +5,17 @@ $.fn.select2.defaults.set('placeholder', '');
 $.fn.select2.defaults.set('allowClear', true);
 
 const initializePlugins = () => {
+    window['multiselect'] = $('.multiselect').multiselect({
+        buttonWidth: '100%',
+        enableCaseInsensitiveFiltering: true,
+        enableFiltering: true,
+        includeSelectAllOption: true,
+        maxHeight: 400,
+    });
+
     $(function() {
         $('.select2').select2();
         $('.select2-dynamic').select2({ tags: true });
-
-        window['multiselect'] = $('.multiselect').multiselect({
-            buttonWidth: '100%',
-            enableCaseInsensitiveFiltering: true,
-            enableFiltering: true,
-            includeSelectAllOption: true,
-            maxHeight: 400,
-        });
 
         $('.thousand-separator').inputmask({
             alias: 'decimal',
