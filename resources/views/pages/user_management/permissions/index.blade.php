@@ -28,7 +28,7 @@
             tableId: 'permissions',
         }, {
             columns: [
-                { data: 'actions', renderer: 'html' },
+                { data: 'actions', renderer: 'html', className: 'htActions htMiddle' },
                 { data: 'id', title: 'ID' },
                 { data: 'name', title: 'Nama' },
                 { data: 'notes', title: 'Keterangan' },

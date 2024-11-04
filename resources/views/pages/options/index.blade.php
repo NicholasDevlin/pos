@@ -28,7 +28,7 @@
             tableId: 'options',
         }, {
             columns: [
-                { data: 'actions', renderer: 'html' },
+                { data: 'actions', renderer: 'html', className: 'htActions htMiddle' },
                 { data: 'id', title: 'ID' },
                 { data: 'name', title: 'Nama' },
                 { data: 'value', title: 'Nilai' },

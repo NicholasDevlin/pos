@@ -264,6 +264,9 @@ class HandsontableWrapper {
             beforeOnCellMouseDown: function (e, coords, td) {
                 if (td.className.includes('htDimmed')) {
                     e.stopImmediatePropagation();
+                }
+
+                if (td.className.includes('htActions')) {
                     e.preventDefault();
                 }
 
