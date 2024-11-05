@@ -3,14 +3,12 @@
 namespace App\Imports;
 
 use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\SkipsErrors;
-use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class DataInitiationImport implements SkipsOnError, ToModel, WithHeadingRow
+class DataInitiationImport implements ToModel, WithHeadingRow
 {
-    use Importable, SkipsErrors;
+    use Importable;
 
     public string $model;
 

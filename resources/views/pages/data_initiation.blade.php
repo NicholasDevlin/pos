@@ -45,14 +45,8 @@
                 <div class="card-body">
                     <div class="card-title mb-3">Impor Data</div>
 
-                    @if ($failures = Session::get('failures'))
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($failures as $failure)
-                                    <li>Baris {{ $loop->iteration }}: {{ $failure->getMessage() }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
+                    @if ($failure_message = session('failure_message'))
+                        <div class="alert alert-danger">{{ $failure_message }}</div>
                     @endif
 
                     {{ html()->form('POST', route('data-initiation.import'))->attributes(['autocomplete' => 'off'])->acceptsFiles()->open() }}

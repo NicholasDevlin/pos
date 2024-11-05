@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\DataInitiationExport;
 use App\Helpers\LogHelper;
 use App\Imports\DataInitiationImport;
+use DB;
 use Excel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -46,20 +47,22 @@ class PageController extends Controller
 
     public function dataInitiationImport(Request $request): RedirectResponse
     {
+        $model = $request->input('model');
+
         try {
-            $import = new DataInitiationImport($request->input('model'));
+            $import = new DataInitiationImport($model);
             $import->import($request->file('file'));
 
-            if ($import->errors()->isNotEmpty()) {
-                session()->flash('fail', 'Data tidak berhasil diimpor!');
-                session()->flash('failures', $import->errors());
-            } else {
-                session()->flash('success', 'Data berhasil diimpor!');
-            }
+            session()->flash('success', 'Data berhasil diimpor!');
         } catch (\Exception $e) {
             report($e);
 
+            $tableName = (new $model)->getTable();
+            DB::statement("ALTER TABLE $tableName AUTO_INCREMENT = 1;");
+            DB::statement('ALTER TABLE activity_log AUTO_INCREMENT = 1;');
+
             session()->flash('fail', 'Data tidak berhasil diimpor!');
+            session()->flash('failure_message', $e->getMessage());
         } finally {
             return redirect($_SERVER['HTTP_REFERER']);
         }
