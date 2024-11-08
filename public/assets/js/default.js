@@ -29,8 +29,13 @@ const initializePlugins = () => {
 }
 
 initializePlugins();
-
 document.addEventListener('load-modal-plugins', initializePlugins);
+
+$(function() {
+    $(document).on('submit', 'form[id="edit-data"]', function() {
+        $(this).find('button[type="submit"]').attr('disabled', 'disabled');
+    });
+});
 
 window.addEventListener('toastr', (e) => {
     const { type, message } = e.detail;
