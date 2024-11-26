@@ -1,11 +1,14 @@
 let lastChecked;
 
-document.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
-    checkbox.addEventListener('click', function (e) {
+document.body.addEventListener('click', function (e) {
+    // Check if the clicked element is a checkbox
+    if (e.target && e.target.type === 'checkbox') {
+        let checkbox = e.target;
+
         if (e.shiftKey && lastChecked && !lastChecked.disabled) {
             let checkboxes = Array.from(document.querySelectorAll('input[type=checkbox]'));
             let start = checkboxes.indexOf(lastChecked);
-            let end = checkboxes.indexOf(this);
+            let end = checkboxes.indexOf(checkbox);
 
             // Adjust the indices to ensure start is less than end
             if (start > end) {
@@ -22,6 +25,7 @@ document.querySelectorAll('input[type=checkbox]').forEach(checkbox => {
                 checkboxes[i].dispatchEvent(event); // Trigger change event
             }
         }
-        lastChecked = this; // Store the last checked checkbox
-    });
+
+        lastChecked = checkbox; // Store the last checked checkbox
+    }
 });
