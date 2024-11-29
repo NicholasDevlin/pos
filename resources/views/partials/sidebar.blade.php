@@ -22,7 +22,7 @@
                         <a class="has-arrow" href="javascript: void(0);"><i class="feather-user-plus"></i><span>Akses Pengguna</span></a>
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{ route('locations.index') }}">Lokasi</a></li>
-                            <li><a href="{{ route('divisions.index') }}">Divisi</a></li>
+                            <li><a href="{{ route('business-units.index') }}">Unit Bisnis</a></li>
                             <li><a href="{{ route('permissions.index') }}">Hak Akses</a></li>
                             <li><a href="{{ route('roles.index') }}">Jabatan</a></li>
                         </ul>

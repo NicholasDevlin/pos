@@ -32,12 +32,12 @@ trait HasScope
     private static function getScopeFilter($builder, $action, $user = null)
     {
         return match ($action) {
-            'SHOW ALL LOCATIONS', 'SHOW ALL DIVISIONS', 'SHOW ALL LOCATIONS-DIVISIONS' => $builder,
+            'SHOW ALL LOCATIONS', 'SHOW ALL BUSINESSUNITS', 'SHOW ALL LOCATIONS-BUSINESSUNITS' => $builder,
             'SHOW SCOPE LOCATIONS' => $builder->whereIn('location_id', array_keys(LogHelper::getLocations($user))),
-            'SHOW SCOPE DIVISIONS' => $builder->whereIn('division_id', array_keys(LogHelper::getDivisions($user))),
-            'SHOW SCOPE LOCATIONS-DIVISIONS' => $builder
-                ->whereIn(DB::raw("CONCAT(location_id, '-', division_id)"), array_keys(LogHelper::getLocationsDivisions($user))),
-            'SHOW OWN LOCATIONS', 'SHOW OWN DIVISIONS', 'SHOW OWN LOCATIONS-DIVISIONS' => $builder
+            'SHOW SCOPE BUSINESSUNITS' => $builder->whereIn('business_unit_id', array_keys(LogHelper::getBusinessUnits($user))),
+            'SHOW SCOPE LOCATIONS-BUSINESSUNITS' => $builder
+                ->whereIn(DB::raw("CONCAT(location_id, '-', business_unit_id)"), array_keys(LogHelper::getLocationsBusinessUnits($user))),
+            'SHOW OWN LOCATIONS', 'SHOW OWN BUSINESSUNITS', 'SHOW OWN LOCATIONS-BUSINESSUNITS' => $builder
                 ->whereIn(with(new static)->getTable().'.id', function ($query) use ($user, $builder) {
                     $query->select('subject_id')
                         ->from('activity_log')
@@ -74,10 +74,10 @@ trait HasScope
         return match ($action) {
             'SHOW ALL LOCATIONS' => LogHelper::getLocations(),
             'SHOW SCOPE LOCATIONS', 'SHOW OWN LOCATIONS' => LogHelper::getLocations($user),
-            'SHOW ALL DIVISIONS' => LogHelper::getDivisions(),
-            'SHOW SCOPE DIVISIONS', 'SHOW OWN DIVISIONS' => LogHelper::getDivisions($user),
-            'SHOW ALL LOCATIONS-DIVISIONS' => LogHelper::getLocationsDivisions(),
-            'SHOW SCOPE LOCATIONS-DIVISIONS', 'SHOW OWN LOCATIONS-DIVISIONS' => LogHelper::getLocationsDivisions($user),
+            'SHOW ALL BUSINESSUNITS' => LogHelper::getBusinessUnits(),
+            'SHOW SCOPE BUSINESSUNITS', 'SHOW OWN BUSINESSUNITS' => LogHelper::getBusinessUnits($user),
+            'SHOW ALL LOCATIONS-BUSINESSUNITS' => LogHelper::getLocationsBusinessUnits(),
+            'SHOW SCOPE LOCATIONS-BUSINESSUNITS', 'SHOW OWN LOCATIONS-BUSINESSUNITS' => LogHelper::getLocationsBusinessUnits($user),
             default => [],
         };
     }

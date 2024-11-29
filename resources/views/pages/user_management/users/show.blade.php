@@ -60,8 +60,8 @@
                         @forelse ($locations as $locationKey => $location)
                             <div class="col-md-4 mb-3">
                                 <small>{{ ucfirst($location) }}</small>
-                                @foreach ($divisions as $divisionKey => $division)
-                                    <div>{{ in_array("[$locationKey][$divisionKey]", $hasScopes) ? '✅' : '❌' }} {{ $division }}</div>
+                                @foreach ($businessUnits as $businessUnitKey => $businessUnit)
+                                    <div>{{ in_array("[$locationKey][$businessUnitKey]", $hasScopes) ? '✅' : '❌' }} {{ $businessUnit }}</div>
                                 @endforeach
                             </div>
                         @empty

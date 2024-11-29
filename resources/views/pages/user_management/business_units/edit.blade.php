@@ -1,14 +1,14 @@
 @php
     $metadata = [
-        'title' => ($division->id ? 'Edit' : 'Tambah') . ' Data',
+        'title' => ($businessUnit->id ? 'Edit' : 'Tambah') . ' Data',
     ];
 @endphp
 
 @extends('layouts.modal')
 
 @section('start')
-    {{ html()->form($division->id ? 'PUT' : 'POST', $division->id ? route('divisions.update', [$division->id]) : route('divisions.store'))->attributes(['data-remote' => 'true', 'autocomplete' => 'off'])->open() }}
-    @php html()->model($division); @endphp
+    {{ html()->form($businessUnit->id ? 'PUT' : 'POST', $businessUnit->id ? route('business-units.update', [$businessUnit->id]) : route('business-units.store'))->attributes(['data-remote' => 'true', 'autocomplete' => 'off'])->open() }}
+    @php html()->model($businessUnit); @endphp
 @endsection
 
 @section('end')
@@ -100,7 +100,7 @@
 
         @foreach ($statusList as $key => $status)
             <div class="form-check">
-                {{ html()->radio($name, false, $key)->checked(old($name) !== null ? old($name) == $key : $division->{$name} !== null && $division->{$name} == $key)->class('form-check-input' . ($errors->has($name) ? ' is-invalid' : '')) }}
+                {{ html()->radio($name, false, $key)->checked(old($name) !== null ? old($name) == $key : $businessUnit->{$name} !== null && $businessUnit->{$name} == $key)->class('form-check-input' . ($errors->has($name) ? ' is-invalid' : '')) }}
                 {{ html()->label($status, "{$name}_{$key}")->class('form-check-label') }}
 
                 @if ($loop->last && $errors->has($name))
@@ -112,5 +112,5 @@
 @endsection
 
 @section('footer')
-    {{ html()->submit($division->id ? 'Update' : 'Simpan')->class('btn btn-primary') }}
+    {{ html()->submit($businessUnit->id ? 'Update' : 'Simpan')->class('btn btn-primary') }}
 @endsection

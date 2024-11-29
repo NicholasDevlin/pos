@@ -41,14 +41,14 @@ class ActivityLogHelper
         Activity::insert($activityLogs);
     }
 
-    public static function delete($builder, $attributeColumns = [], $subjectId = 'id', $scopeColumns = ['division_id', 'location_id']): void
+    public static function delete($builder, $attributeColumns = [], $subjectId = 'id', $scopeColumns = ['business_unit_id', 'location_id']): void
     {
         self::createActivityLogs($builder, 'deleted', $attributeColumns, $subjectId, $scopeColumns);
 
         $builder->delete();
     }
 
-    public static function insert($model, $data, $attributeColumns = [], $subjectId = 'id', $scopeColumns = ['division_id', 'location_id']): void
+    public static function insert($model, $data, $attributeColumns = [], $subjectId = 'id', $scopeColumns = ['business_unit_id', 'location_id']): void
     {
         $uid = uniqid().session()->getId();
         $model->insert(array_map(fn ($datum) => [...$datum, 'uid' => $uid], $data));

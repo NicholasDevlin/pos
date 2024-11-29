@@ -5,7 +5,7 @@ namespace App\Http\Controllers\UserManagement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserManagement\UserRequest;
 use App\Models\User;
-use App\Models\UserManagement\Division;
+use App\Models\UserManagement\BusinessUnit;
 use App\Models\UserManagement\Location;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -65,9 +65,9 @@ class UserController extends Controller
 
         $roles = Role::pluck('notes', 'name')->all();
         $locations = Location::where('status', Location::STATUS_ACTIVE)->pluck('name', 'id')->all();
-        $divisions = Division::where('status', Division::STATUS_ACTIVE)->pluck('name', 'id')->all();
+        $businessUnits = BusinessUnit::where('status', BusinessUnit::STATUS_ACTIVE)->pluck('name', 'id')->all();
 
-        return view('pages.user_management.users.edit', compact('user', 'statusList', 'roles', 'locations', 'divisions'));
+        return view('pages.user_management.users.edit', compact('user', 'statusList', 'roles', 'locations', 'businessUnits'));
     }
 
     /**
@@ -88,13 +88,13 @@ class UserController extends Controller
             $user = User::create($input);
             $user->syncRoles($roles);
 
-            foreach ($scopes as $location => $divisions) {
-                foreach ($divisions as $division) {
+            foreach ($scopes as $location => $businessUnits) {
+                foreach ($businessUnits as $businessUnit) {
                     $userScopes[] = [
                         'model_type' => get_class($user),
                         'model_id' => $user->id,
                         'location_id' => $location,
-                        'division_id' => $division,
+                        'business_unit_id' => $businessUnit,
                     ];
                 }
             }
@@ -121,16 +121,16 @@ class UserController extends Controller
     {
         $roles = Role::pluck('notes', 'name')->all();
         $locations = Location::where('status', Location::STATUS_ACTIVE)->pluck('name', 'id')->all();
-        $divisions = Division::where('status', Division::STATUS_ACTIVE)->pluck('name', 'id')->all();
+        $businessUnits = BusinessUnit::where('status', BusinessUnit::STATUS_ACTIVE)->pluck('name', 'id')->all();
 
         $hasRoles = $user->roles()->pluck('name')->all();
 
         $hasScopes = $user->modelHasScopes()
             ->get()
-            ->map(fn ($scope) => "[{$scope['location_id']}][{$scope['division_id']}]")
+            ->map(fn ($scope) => "[{$scope['location_id']}][{$scope['business_unit_id']}]")
             ->all();
 
-        return view('pages.user_management.users.show', compact('user', 'roles', 'locations', 'divisions', 'hasRoles', 'hasScopes'));
+        return view('pages.user_management.users.show', compact('user', 'roles', 'locations', 'businessUnits', 'hasRoles', 'hasScopes'));
     }
 
     /**
@@ -142,16 +142,16 @@ class UserController extends Controller
 
         $roles = Role::pluck('notes', 'name')->all();
         $locations = Location::where('status', Location::STATUS_ACTIVE)->pluck('name', 'id')->all();
-        $divisions = Division::where('status', Division::STATUS_ACTIVE)->pluck('name', 'id')->all();
+        $businessUnits = BusinessUnit::where('status', BusinessUnit::STATUS_ACTIVE)->pluck('name', 'id')->all();
 
         $hasRoles = $user->roles()->pluck('name')->all();
 
         $hasScopes = $user->modelHasScopes()
             ->get()
-            ->map(fn ($scope) => "[{$scope['location_id']}][{$scope['division_id']}]")
+            ->map(fn ($scope) => "[{$scope['location_id']}][{$scope['business_unit_id']}]")
             ->all();
 
-        return view('pages.user_management.users.edit', compact('user', 'statusList', 'roles', 'locations', 'divisions', 'hasRoles', 'hasScopes'));
+        return view('pages.user_management.users.edit', compact('user', 'statusList', 'roles', 'locations', 'businessUnits', 'hasRoles', 'hasScopes'));
     }
 
     /**
@@ -174,15 +174,15 @@ class UserController extends Controller
 
             $scopesWhereQuery = [];
 
-            foreach ($scopes as $location => $divisions) {
-                foreach ($divisions as $division) {
-                    $scopesWhereQuery[] = "($location,$division)";
+            foreach ($scopes as $location => $businessUnits) {
+                foreach ($businessUnits as $businessUnit) {
+                    $scopesWhereQuery[] = "($location,$businessUnit)";
 
                     $userScopes[] = [
                         'model_type' => get_class($user),
                         'model_id' => $user->id,
                         'location_id' => $location,
-                        'division_id' => $division,
+                        'business_unit_id' => $businessUnit,
                     ];
                 }
             }
@@ -194,7 +194,7 @@ class UserController extends Controller
                     'model_type' => get_class($user),
                     'model_id' => $user->id,
                 ])
-                ->whereRaw("(location_id,division_id) NOT IN ($scopesWhereRawQuery)")
+                ->whereRaw("(location_id,business_unit_id) NOT IN ($scopesWhereRawQuery)")
                 ->delete();
 
             DB::table('model_has_scopes')

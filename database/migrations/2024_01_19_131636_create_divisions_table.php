@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\UserManagement\Division;
+use App\Models\UserManagement\BusinessUnit;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name')->unique();
 
             $table->text('notes')->nullable();
-            $table->char('status', 1)->default(Division::STATUS_ACTIVE);
+            $table->char('status', 1)->default(BusinessUnit::STATUS_ACTIVE);
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

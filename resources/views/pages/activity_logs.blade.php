@@ -47,30 +47,30 @@
 
                             <table class="table table-sm table-borderless ml-3">
                                 <tbody>
-                                <tr>
-                                    <td style="width: 150px;">
-                                        {{ html()->radio($radioName, null, 'fixed')->class(['form-check-input']) }}
-                                        {{ html()->label('Mulai dari ...<br>Sampai saat ini', $radioName . '_fixed') }}
-                                    </td>
-                                    <td>
-                                        {{ html()->select($fixedDateName, $fixedDateOptions)->placeholder('')->class('form-control' . ($errors->has($fixedDateName) ? ' is-invalid' : ''))->disabled() }}
+                                    <tr>
+                                        <td style="width: 150px;">
+                                            {{ html()->radio($radioName, null, 'fixed')->class(['form-check-input']) }}
+                                            {{ html()->label('Mulai dari ...<br>Sampai saat ini', $radioName . '_fixed') }}
+                                        </td>
+                                        <td>
+                                            {{ html()->select($fixedDateName, $fixedDateOptions)->placeholder('')->class('form-control' . ($errors->has($fixedDateName) ? ' is-invalid' : ''))->disabled() }}
 
-                                        <span class="{{ $fixedDateName }}--error" role="alert"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        {{ html()->radio($radioName, null, 'relative')->class(['form-check-input']) }}
-                                        {{ html()->label('Range Tanggal', $radioName . '_relative') }}
+                                            <span class="{{ $fixedDateName }}--error" role="alert"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {{ html()->radio($radioName, null, 'relative')->class(['form-check-input']) }}
+                                            {{ html()->label('Range Tanggal', $radioName . '_relative') }}
 
-                                        <span class="{{ $radioName }}--error" role="alert"></span>
-                                    </td>
-                                    <td>
-                                        {{ html()->text($relativeDateName)->class('form-control' . ($errors->has($relativeDateName) ? ' is-invalid' : ''))->disabled() }}
+                                            <span class="{{ $radioName }}--error" role="alert"></span>
+                                        </td>
+                                        <td>
+                                            {{ html()->text($relativeDateName)->class('form-control' . ($errors->has($relativeDateName) ? ' is-invalid' : ''))->disabled() }}
 
-                                        <span class="{{ $relativeDateName }}--error" role="alert"></span>
-                                    </td>
-                                </tr>
+                                            <span class="{{ $relativeDateName }}--error" role="alert"></span>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -80,7 +80,7 @@
                         </div>
 
                         @role('super-admin')
-                        <a class='btn btn-sm btn-light position-absolute' href="{{ route('logs', ['all' => 'true']) }}" title="Show All" style="top: 20px; right: 20px;">Tampil Semua</a>
+                            <a class='btn btn-sm btn-light position-absolute' href="{{ route('logs', ['all' => 'true']) }}" title="Show All" style="top: 20px; right: 20px;">Tampil Semua</a>
                         @endrole
 
                         {{ html()->form()->close() }}

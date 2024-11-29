@@ -129,10 +129,10 @@
                                 <div class="col-md-4 mb-2">
                                     <small>{{ ucfirst($location) }}</small>
                                     <div>
-                                        @foreach ($divisions as $divisionKey => $division)
+                                        @foreach ($businessUnits as $businessUnitKey => $businessUnit)
                                             <div class="form-check">
-                                                {{ html()->checkbox("scopes[$locationKey][]", false, $divisionKey)->checked(old($errorName) !== null ? in_array($divisionKey, old($errorName)[$locationKey]) : isset($hasScopes) && in_array("[$locationKey][$divisionKey]", $hasScopes))->id($name . $locationKey . $divisionKey)->class('form-check-input' . ($errors->has($errorName) ? ' is-invalid' : '')) }}
-                                                {{ html()->label($division, $name . $locationKey . $divisionKey)->class('form-check-label') }}
+                                                {{ html()->checkbox("scopes[$locationKey][]", false, $businessUnitKey)->checked(old($errorName) !== null ? in_array($businessUnitKey, old($errorName)[$locationKey]) : isset($hasScopes) && in_array("[$locationKey][$businessUnitKey]", $hasScopes))->id($name . $locationKey . $businessUnitKey)->class('form-check-input' . ($errors->has($errorName) ? ' is-invalid' : '')) }}
+                                                {{ html()->label($businessUnit, $name . $locationKey . $businessUnitKey)->class('form-check-label') }}
 
                                                 @if ($loop->last && $errors->has($errorName))
                                                     <div class="invalid-feedback">{{ $errors->get($errorName)[0] }}</div>

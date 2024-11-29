@@ -123,15 +123,15 @@ class ActivityLogController extends Controller
             return $activities
                 ->whereRaw(<<<'WHERE'
 CASE
-    WHEN JSON_VALUE(properties, '$.scope.location_id') IS NOT NULL AND JSON_VALUE(properties, '$.scope.division_id') IS NOT NULL THEN
-        (JSON_VALUE(properties, '$.scope.location_id'), JSON_VALUE(properties, '$.scope.division_id')) IN
-        (SELECT location_id, division_id FROM model_has_scopes WHERE model_id = ?)
+    WHEN JSON_VALUE(properties, '$.scope.location_id') IS NOT NULL AND JSON_VALUE(properties, '$.scope.business_unit_id') IS NOT NULL THEN
+        (JSON_VALUE(properties, '$.scope.location_id'), JSON_VALUE(properties, '$.scope.business_unit_id')) IN
+        (SELECT location_id, business_unit_id FROM model_has_scopes WHERE model_id = ?)
     WHEN JSON_VALUE(properties, '$.scope.location_id') IS NOT NULL THEN
         JSON_VALUE(properties, '$.scope.location_id') IN
         (SELECT DISTINCT location_id FROM model_has_scopes WHERE model_id = ?)
-    WHEN JSON_VALUE(properties, '$.scope.division_id') IS NOT NULL THEN
-        JSON_VALUE(properties, '$.scope.division_id') IN
-        (SELECT DISTINCT division_id FROM model_has_scopes WHERE model_id = ?)
+    WHEN JSON_VALUE(properties, '$.scope.business_unit_id') IS NOT NULL THEN
+        JSON_VALUE(properties, '$.scope.business_unit_id') IN
+        (SELECT DISTINCT business_unit_id FROM model_has_scopes WHERE model_id = ?)
     ELSE TRUE
 END
 WHERE, array_fill(0, 3, auth()->user()->id))

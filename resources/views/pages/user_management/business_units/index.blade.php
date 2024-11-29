@@ -1,6 +1,6 @@
 @php
     $metadata = [
-        'title' => 'Divisi',
+        'title' => 'Unit Bisnis',
         'breadcrumb' => [['link' => '#', 'menu' => 'Manajemen Pengguna'], ['link' => '#', 'menu' => 'Akses Pengguna']],
     ];
 @endphp
@@ -13,9 +13,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
-                        <a class="btn btn-dark" data-remote="true" type="button" href="{{ route('divisions.create') }}">Tambah Data</a>
+                        <a class="btn btn-dark" data-remote="true" type="button" href="{{ route('business-units.create') }}">Tambah Data</a>
                     </div>
-                    <div id="divisions"></div>
+                    <div id="business-units"></div>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
 @push('scripts')
     <script>
         const hot = new HandsontableWrapper({
-            tableId: 'divisions',
+            tableId: 'business-units',
         }, {
             columns: [
                 { data: 'actions', renderer: 'html', className: 'htActions htMiddle' },

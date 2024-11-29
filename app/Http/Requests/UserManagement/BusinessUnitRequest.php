@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\UserManagement;
 
-use App\Models\UserManagement\Division;
+use App\Models\UserManagement\BusinessUnit;
 use Elegant\Sanitizer\Laravel\SanitizesInput;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class DivisionRequest extends FormRequest
+class BusinessUnitRequest extends FormRequest
 {
     use SanitizesInput;
 
@@ -32,7 +32,7 @@ class DivisionRequest extends FormRequest
             'short_name' => ['required', 'string', 'max:255'],
             'code_name' => ['required', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
-            'status' => ['required', Rule::in(array_keys(Division::statusList()))],
+            'status' => ['required', Rule::in(array_keys(BusinessUnit::statusList()))],
         ];
     }
 
@@ -49,12 +49,12 @@ class DivisionRequest extends FormRequest
 
     protected function getRedirectUrl(): string
     {
-        $division = $this->route()->parameter('division');
+        $businessUnit = $this->route()->parameter('business_unit');
 
-        if ($division) {
-            return route('divisions.edit', $division);
+        if ($businessUnit) {
+            return route('business-units.edit', $businessUnit);
         }
 
-        return route('divisions.create');
+        return route('business-units.create');
     }
 }

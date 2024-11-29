@@ -15,7 +15,7 @@ class ModelHasScope extends Model
 
     protected $fillable = [
         'location_id',
-        'division_id',
+        'business_unit_id',
     ];
 
     public function model(): MorphTo
@@ -28,8 +28,8 @@ class ModelHasScope extends Model
         return $this->belongsTo(Location::class);
     }
 
-    public function division(): BelongsTo
+    public function businessUnit(): BelongsTo
     {
-        return $this->belongsTo(Division::class);
+        return $this->belongsTo(BusinessUnit::class);
     }
 }

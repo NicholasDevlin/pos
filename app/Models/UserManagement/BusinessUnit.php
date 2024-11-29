@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Division extends Model
+class BusinessUnit extends Model
 {
     use HasActivityLogOptions, HasDateSerialization, HasFactory, LogsActivity;
 

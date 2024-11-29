@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\UserManagement\Division;
+use App\Models\UserManagement\BusinessUnit;
 use App\Models\UserManagement\Location;
 use App\Models\UserManagement\ModelHasScope;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +12,7 @@ class LogHelper
 {
     const modelToLogName = [
         "App\Models\User" => 'Pengguna',
-        "App\Models\UserManagement\Division" => 'Divisi',
+        "App\Models\UserManagement\BusinessUnit" => 'Unit Bisnis',
         "App\Models\UserManagement\Location" => 'Lokasi',
         "App\Models\Option" => 'Konfigurasi',
     ];
@@ -121,45 +121,45 @@ class LogHelper
         return Location::where('status', Location::STATUS_ACTIVE)->pluck('name', 'id')->all();
     }
 
-    public static function getDivisions($user = null): array
+    public static function getBusinessUnits($user = null): array
     {
         if ($user) {
-            return ModelHasScope::join('divisions', 'divisions.id', 'model_has_scopes.division_id')
+            return ModelHasScope::join('business_units', 'business_units.id', 'model_has_scopes.business_unit_id')
                 ->where([
                     'model_has_scopes.model_id' => $user->id,
-                    'divisions.status' => Division::STATUS_ACTIVE,
+                    'business_units.status' => BusinessUnit::STATUS_ACTIVE,
                 ])
-                ->orderBy('model_has_scopes.division_id')
-                ->pluck('divisions.name', 'model_has_scopes.division_id')
+                ->orderBy('model_has_scopes.business_unit_id')
+                ->pluck('business_units.name', 'model_has_scopes.business_unit_id')
                 ->all();
         }
 
-        return Division::where('status', Division::STATUS_ACTIVE)->pluck('name', 'id')->all();
+        return BusinessUnit::where('status', BusinessUnit::STATUS_ACTIVE)->pluck('name', 'id')->all();
     }
 
-    public static function getLocationsDivisions($user = null): array
+    public static function getLocationsBusinessUnits($user = null): array
     {
         if ($user) {
             return ModelHasScope::join('locations', 'locations.id', 'model_has_scopes.location_id')
-                ->join('divisions', 'divisions.id', 'model_has_scopes.division_id')
+                ->join('business_units', 'business_units.id', 'model_has_scopes.business_unit_id')
                 ->where([
                     'model_has_scopes.model_id' => $user->id,
                     'locations.status' => Location::STATUS_ACTIVE,
-                    'divisions.status' => Division::STATUS_ACTIVE,
+                    'business_units.status' => BusinessUnit::STATUS_ACTIVE,
                 ])
-                ->select(DB::raw("CONCAT(locations.name, ' | ', divisions.name) AS 'value'"), DB::raw("CONCAT(model_has_scopes.location_id, '-', model_has_scopes.division_id) AS 'key'"))
+                ->select(DB::raw("CONCAT(locations.name, ' | ', business_units.name) AS 'value'"), DB::raw("CONCAT(model_has_scopes.location_id, '-', model_has_scopes.business_unit_id) AS 'key'"))
                 ->pluck('value', 'key')
                 ->all();
         }
 
         $locations = self::getLocations();
-        $divisions = self::getDivisions();
+        $businessUnits = self::getBusinessUnits();
 
         $data = [];
 
         foreach ($locations as $locationKey => $location) {
-            foreach ($divisions as $divisionKey => $division) {
-                $data["$locationKey-$divisionKey"] = "$location | $division";
+            foreach ($businessUnits as $businessUnitKey => $businessUnit) {
+                $data["$locationKey-$businessUnitKey"] = "$location | $businessUnit";
             }
         }
 
