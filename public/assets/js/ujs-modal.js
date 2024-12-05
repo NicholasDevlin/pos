@@ -9,7 +9,9 @@ $(document).on('ajax:success', function (_, xhr) {
         iframeWindow.print();
         window.location.reload();
 
-        // var myWindow=window.open('','');
+        // Debugging Print:
+        // -------------------------------------------------
+        // const myWindow=window.open('','');
         // myWindow.document.write(xhr);
         // myWindow.document.close();
 
