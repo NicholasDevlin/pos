@@ -109,7 +109,7 @@
 
                     <hr>
 
-                    {{ html()->submit($role->id ? 'Update' : 'Simpan')->class('btn btn-primary') }}
+                    {{ html()->submit($role->id ? 'Update' : 'Simpan')->class('btn btn-primary')->style(['position' => 'sticky', 'bottom' => '30px']) }}
                 </div>
             </div>
         </div>
@@ -122,6 +122,21 @@
 @push('scripts')
     <script>
         $(function() {
+            // To retain scroll position on refresh
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'auto';
+            }
+
+            // To retain scroll position on Laravel redirect
+            $('form').on('submit', function() {
+                localStorage.setItem('role-page-scroll-position', window.scrollY);
+            });
+            const savedScrollPosition = localStorage.getItem('role-page-scroll-position');
+            if (savedScrollPosition) {
+                window.scrollTo(0, parseInt(savedScrollPosition, 10));
+                localStorage.removeItem('scrollPosition'); // Clean up
+            }
+
             $("input[value='logs.show.scope']").trigger("change");
         });
 
