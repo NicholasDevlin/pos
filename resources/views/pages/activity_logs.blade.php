@@ -1,3 +1,4 @@
+{{-- blade-formatter-disable --}}
 @php
     $metadata = [
         'title' => 'Log Aktivitas',
@@ -103,6 +104,7 @@
     <script>
         const hot = new HandsontableWrapper({
             tableId: 'activity-logs',
+            isExportEnabled: false,
         }, {
             columns: [
                 { data: 'created_at_frmt', title: 'Waktu Transaksi', type: 'date', dateFormat: 'DD-MM-YYYY HH.mm.ss' },

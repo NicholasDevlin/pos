@@ -1,13 +1,40 @@
 class HandsontableWrapper {
-    constructor({ tableId, programName = null, title = $('.header-title').text() }, options = {}) {
+    constructor({ tableId, programName = null, title = $('.header-title').text(), isExportEnabled = true }, options = {}) {
         this.tableId = tableId;
         this.programName = programName;
         this.options = options;
         this.title = title;
+        this.isExportEnabled = isExportEnabled;
+        this.hot = null;
 
         this.#createTableWrapper();
         this.#createTableContainer();
         this.#createTableStatusBar();
+
+        // Return a Proxy object for dynamic method forwarding
+        return new Proxy(this, {
+            get: (target, prop) => {
+                // Check if the property exists in the wrapper (HandsontableWrapper instance)
+                if (prop in target) {
+                    return target[prop];
+                }
+
+                // Check if the property exists in the Handsontable instance
+                if (target.hot) {
+                    const instanceProp = target.hot[prop];
+
+                    // If it's a function, bind it to the Handsontable instance
+                    if (typeof instanceProp === 'function') {
+                        return instanceProp.bind(target.hot); // Bind the 'this' context for safer and future-proof way to forward to Handsontable instance
+                    }
+
+                    // Otherwise, return the property as is (e.g., non-function properties)
+                    return instanceProp;
+                }
+
+                return undefined;
+            },
+        });
     }
 
     get tableWrapper() {
@@ -44,9 +71,11 @@ class HandsontableWrapper {
                 <div id="${this.tableStatusBar}" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Helvetica Neue,Arial,sans-serif; font-size: 13px; margin-top: 0.75em;">
                     Showing <span class="filtered"></span> of <span class="total"></span> entries.
                 </div>
-                <button class="btn btn-sm btn-light mt-2" style="color: #56677d;" id="export-button-${this.tableId}" type="button">
-                    <i class="fa fa-table mr-1"></i> Export Excel
-                </button>
+                ${this.isExportEnabled ? `
+                    <button class="btn btn-sm btn-light mt-2" style="color: #56677d;" id="export-button-${this.tableId}" type="button">
+                        <i class="fa fa-table mr-1"></i> Export Excel
+                    </button>
+                ` : ''}
             </div>
         `;
 
@@ -58,6 +87,9 @@ class HandsontableWrapper {
 
         const columnDelimiter = '|~|';
         const rowDelimiter = '\r\n';
+        const nestedHeaders = wrapper.options.nestedHeaders
+            ? this.trimEmptyBeginningOfNestedHeaderColumns(wrapper.options.nestedHeaders)
+            : undefined;
 
         $(`#export-button-${this.tableId}`).on('click', function() {
             let hidePlugin;
@@ -72,7 +104,8 @@ class HandsontableWrapper {
                 .exportAsString('csv', {
                     bom: false,
                     columnDelimiter,
-                    columnHeaders: true,
+                    ...!nestedHeaders
+                        ? { columnHeaders: true } : {},
                     exportHiddenColumns: false,
                     exportHiddenRows: false,
                     rowDelimiter,
@@ -80,6 +113,18 @@ class HandsontableWrapper {
                 })
                 .trim()
                 .split(rowDelimiter);
+
+            const headers = nestedHeaders?.map(row => {
+                return row.map(col => {
+                    const label = typeof col === 'object' ? wrapper.stripHtmlTags(col.label || '') : wrapper.stripHtmlTags(col);
+
+                    if (typeof col === 'object' && col.colspan > 1) {
+                        return [label, ...Array(col.colspan - 1).fill('')];
+                    } else {
+                        return label;
+                    }
+                }).flat();
+            }) ?? [];
 
             const rowsArray = rowsString.map((row) => {
                 return row.trim().split(columnDelimiter).map((value) => {
@@ -104,24 +149,53 @@ class HandsontableWrapper {
                 });
             });
 
+            rowsArray.unshift(...headers);
+
+            const merges = [];
+            let headerStartRow = 1;
+            nestedHeaders?.forEach((row, rowIndex) => {
+                let colIndex = 0; // Start column
+                row.forEach(col => {
+                    if (typeof col === 'object' && col.colspan > 1) {
+                        merges.push({
+                            s: { r: headerStartRow + rowIndex, c: colIndex }, // Start cell
+                            e: { r: headerStartRow + rowIndex, c: colIndex + col.colspan - 1 }, // End cell
+                        });
+                        colIndex += col.colspan;
+                    } else {
+                        colIndex++;
+                    }
+                });
+            });
+
             const columnWidths = [];
             const wrapTextColumnNumbers = [];
+
+            const hiddenColumnIndexes = new Set(wrapper.hot.getPlugin('hiddenColumns').getHiddenColumns());
+            const visibleColumns = wrapper.options.columns.filter((_, index) => !hiddenColumnIndexes.has(index));
+            const numericColIndexes = visibleColumns.reduce((acc, column, index) => {
+                if (column.type === 'numeric') acc.push(index);
+                return acc;
+            }, []);
+
             const rowsArrayFormatted = rowsArray.map((row, rowIndex) => {
-                Object.keys(row).map((column) => {
-                    const value = row[column] ?? '';
+                if (!nestedHeaders || (rowIndex >= nestedHeaders.length - 1)) {
+                    Object.keys(row).map((column) => {
+                        const value = row[column] ?? '';
 
-                    let currentMaxValue = value.length;
-                    if (value.includes('\n')) {
-                        wrapTextColumnNumbers.push(parseInt(column) + 1);
+                        let currentMaxValue = value.length;
+                        if (value.includes('\n')) {
+                            wrapTextColumnNumbers.push(parseInt(column) + 1);
 
-                        const valueWithLineBreaks = value.split('\n');
-                        currentMaxValue = Math.max(...valueWithLineBreaks.map((item) => item.length));
-                    }
+                            const valueWithLineBreaks = value.split('\n');
+                            currentMaxValue = Math.max(...valueWithLineBreaks.map((item) => item.length));
+                        }
 
-                    columnWidths[column] = Math.max(columnWidths[column] ?? 0, currentMaxValue + 4);
-                })
+                        columnWidths[column] = Math.max(columnWidths[column] ?? 0, currentMaxValue + 4);
+                    });
+                }
 
-                if (rowIndex === 0) {
+                if (nestedHeaders ? (rowIndex < nestedHeaders.length) : rowIndex === 0) {
                     return row.map((value) => {
                         return {
                             v: value,
@@ -135,13 +209,25 @@ class HandsontableWrapper {
                         };
                     });
                 } else {
-                    return row.map((value) => {
+                    return row.map((value, colIndex) => {
+                        const isNumberType = numericColIndexes.includes(colIndex);
+                        let isFloat = false;
+
+                        if (isNumberType) {
+                            const valueFrmt = Number(value);
+                            if (!Number.isInteger(valueFrmt)) {
+                                value = valueFrmt.toFixed(2);
+                                isFloat = true;
+                            }
+                        }
+
                         return {
                             v: value,
-                            t: 's',
+                            t: isNumberType ? 'n' : 's',
                             s: {
                                 alignment: { horizontal: 'center', vertical: 'center' },
                                 border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } },
+                                ...isNumberType ? { numFmt: `#,##0${isFloat ? '.00' : ''}` } : {},
                             },
                         };
                     });
@@ -161,6 +247,7 @@ class HandsontableWrapper {
                 ...rowsArrayFormatted,
             ]);
             worksheet["!cols"] = columnWidths.map((width) => ({ width }));
+            worksheet['!merges'] = merges;
 
             wrapper.setWrapTextForColumns(worksheet, [...new Set(wrapTextColumnNumbers)]);
 
@@ -171,8 +258,16 @@ class HandsontableWrapper {
             if (!worksheet["!rows"]) worksheet["!rows"] = [];
 
             /* create row metadata object if it does not exist */
-            if (!worksheet["!rows"][ROW_1_INDEX]) worksheet["!rows"][ROW_1_INDEX] = { hpx: 37.5 };
-            if (!worksheet["!rows"][ROW_2_INDEX]) worksheet["!rows"][ROW_2_INDEX] = { hpx: 22.5 };
+            if (!worksheet["!rows"][ROW_1_INDEX]) worksheet["!rows"][ROW_1_INDEX] = { hpx: 37.5 }; // Title
+            if (nestedHeaders) {
+                nestedHeaders.forEach((headerLevelRow, headerLevelIndex) => {
+                    const headerIndex = headerLevelIndex + ROW_1_INDEX + 1;
+
+                    if (!worksheet["!rows"][headerIndex]) worksheet["!rows"][headerIndex] = { hpx: 22.5 }; // Headers
+                });
+            } else {
+                if (!worksheet["!rows"][ROW_2_INDEX]) worksheet["!rows"][ROW_2_INDEX] = { hpx: 22.5 }; // Headers
+            }
 
             XLSX.utils.book_append_sheet(workbook, worksheet, wrapper.title);
 
@@ -186,6 +281,12 @@ class HandsontableWrapper {
 
     checkIsContainsHTMLTag(str) {
         return /<[a-z][\s\S]*>/i.test(str);
+    }
+
+    stripHtmlTags(input) {
+        const div = document.createElement('div');
+        div.innerHTML = input;
+        return div.textContent || div.innerText || '';
     }
 
     setWrapTextForColumns(ws, columns) {
@@ -233,10 +334,60 @@ class HandsontableWrapper {
         });
     }
 
+    updateSettings(options) {
+        this.hot.updateSettings(options);
+        this.options = { ...this.options, ...options };
+    }
+
+    trimEmptyBeginningOfNestedHeaderColumns(nestedHeaders) {
+        let totalColumnsToRemove = 999;
+
+        for (const row of nestedHeaders) {
+            let columnToRemoveCount = 0;
+
+            for (const cell of row) {
+                if (typeof cell === 'object' && !cell.label) {
+                    columnToRemoveCount += cell.colspan || 1; // Default colspan to 1 if not specified
+                } else if (cell === '') {
+                    columnToRemoveCount += 1;
+                } else {
+                    // Break the loop if a non-empty string or an object with label is found
+                    break;
+                }
+            }
+
+            totalColumnsToRemove = Math.min(totalColumnsToRemove, columnToRemoveCount); // Retain the smallest remove count across rows
+        }
+
+        return nestedHeaders.map(row => {
+            let remainingToRemove = totalColumnsToRemove;
+
+            return row.filter(cell => {
+                if (remainingToRemove === 0) return true; // Keep cell if nothing to remove
+
+                if (typeof cell === 'object' && !cell.label) {
+                    // Decrease colspan and remove cell if it becomes zero
+                    const decrement = Math.min(remainingToRemove, cell.colspan);
+                    cell.colspan -= decrement;
+                    remainingToRemove -= decrement;
+                    return cell.colspan > 0;
+                }
+
+                if (cell === '') {
+                    // Remove empty string
+                    remainingToRemove--;
+                    return false;
+                }
+
+                return true; // Keep cell if it's not removable
+            });
+        });
+    }
+
     build() {
         const wrapper = this;
 
-        const hot = new Handsontable(document.getElementById(this.tableContainer), {
+        this.hot = new Handsontable(document.getElementById(this.tableContainer), {
             className: 'htMiddle',
             height: '90vh',
             rowHeights: 35,
@@ -289,9 +440,9 @@ class HandsontableWrapper {
             ...this.options,
         });
 
-        this.attachExportButtonEvent(hot);
+        if (this.isExportEnabled) this.attachExportButtonEvent(this.hot);
 
-        return hot;
+        return wrapper;
     }
 }
 
