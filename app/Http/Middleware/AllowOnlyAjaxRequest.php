@@ -16,7 +16,7 @@ class AllowOnlyAjaxRequest
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->ajax()) {
-            abort(Response::HTTP_METHOD_NOT_ALLOWED);
+            return redirect('/');
         }
 
         return $next($request);
