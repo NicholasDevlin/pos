@@ -91,7 +91,7 @@ class HandsontableWrapper {
             ? this.trimEmptyBeginningOfNestedHeaderColumns(wrapper.options.nestedHeaders)
             : undefined;
 
-        $(`#export-button-${this.tableId}`).on('click', function() {
+        $(`#export-button-${this.tableId}`).off('click').on('click', function() {
             let hidePlugin;
 
             if (hot.colToProp(0) === 'actions') {
@@ -337,6 +337,8 @@ class HandsontableWrapper {
     updateSettings(options) {
         this.hot.updateSettings(options);
         this.options = { ...this.options, ...options };
+
+        if (this.isExportEnabled) this.attachExportButtonEvent(this.hot);
     }
 
     trimEmptyBeginningOfNestedHeaderColumns(nestedHeaders) {
