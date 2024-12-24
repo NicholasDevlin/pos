@@ -269,7 +269,7 @@ class HandsontableWrapper {
                 if (!worksheet["!rows"][ROW_2_INDEX]) worksheet["!rows"][ROW_2_INDEX] = { hpx: 22.5 }; // Headers
             }
 
-            XLSX.utils.book_append_sheet(workbook, worksheet, wrapper.title);
+            XLSX.utils.book_append_sheet(workbook, worksheet, wrapper.truncateWithEllipsis(wrapper.title));
 
             XLSX.writeFile(workbook, `${wrapper.title}${wrapper.programName !== null ? ' [' + wrapper.programName + ']' : ''} - ${new Date(Date.now() + (7 * 60 * 60 * 1000)).toISOString().replace(/[-T:Z.]/g, '').slice(0, 14)}.xlsx`, { compression: true });
 
@@ -384,6 +384,14 @@ class HandsontableWrapper {
                 return true; // Keep cell if it's not removable
             });
         });
+    }
+
+    truncateWithEllipsis(str) {
+        if (str.length > 31) {
+            return str.slice(0, 28) + "...";
+        }
+
+        return str;
     }
 
     build() {
