@@ -145,7 +145,10 @@ class HandsontableWrapper {
                         }).join(separator);
                     }
 
-                    return value.trim().replace(/"/g, '');
+                    return value
+                        .trim()
+                        .replace(/^"|"$/gm, '') // Remove double quotes at the start and end of the string
+                        .replace(/""/g, '"'); // If there's any quote left in the middle part of the string, replace it with single quotes
                 });
             });
 
