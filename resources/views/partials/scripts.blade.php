@@ -5,12 +5,13 @@
 <script src="{{ asset('drezoc/js/waves.js') }}"></script>
 <script src="{{ asset('assets/js/theme.js') }}"></script>
 
+@php $version = \Illuminate\Support\Str::random(5); @endphp
 <script src="{{ asset('assets/plugins/jquery-ujs/src/rails.js') }}"></script>
-<script src="{{ asset('assets/js/ujs-modal.js') }}"></script>
+<script src="{{ asset('assets/js/ujs-modal.js') . "?v=$version" }}"></script>
 <script src="{{ asset('assets/plugins/handsontable/dist/handsontable.full.min.js') }}"></script>
-<script src="{{ asset('assets/js/handsontable.js') }}"></script>
+<script src="{{ asset('assets/js/handsontable.js') . "?v=$version" }}"></script>
 <script src="{{ asset('assets/plugins/axios/dist/axios.min.js') }}"></script>
-<script src="{{ asset('assets/js/shiftclick-multicheckboxes.js') }}"></script>
+<script src="{{ asset('assets/js/shiftclick-multicheckboxes.js') . "?v=$version" }}"></script>
 
 <script src="{{ asset('assets/plugins/bootstrap-multiselect/js/bootstrap-multiselect.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
