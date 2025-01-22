@@ -179,11 +179,12 @@
 
                                 Object.keys(errors).forEach((key) => {
                                     const message = errors[key][0];
+                                    const parentKey = key.split('.')[0];
+                                    const errorKey = (!$(`[name="${key}"]`).length && parentKey !== key) ? parentKey : key;
 
-                                    $(`[name="${key}"]`)
-                                        .addClass('is-invalid')
-                                        .parent('.multiselect-native-select')?.append(`<span class="animated fadeIn ${key}--error" role="alert"></span>`);
-                                    $(`.${key}--error`).addClass('invalid-feedback').text(message);
+                                    $(`[name^="${errorKey}"]`).addClass('is-invalid');
+
+                                    $(`.${errorKey}--error`).addClass('d-block invalid-feedback').text(message);
                                 });
                             } else {
                                 toastr['error']('Data tidak berhasil ditampilkan!');
