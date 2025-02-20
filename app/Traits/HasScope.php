@@ -31,12 +31,14 @@ trait HasScope
 
     private static function getScopeFilter($builder, $action, $user = null)
     {
+        $tableName = with(new static)->getTable();
+
         return match ($action) {
             'SHOW ALL LOCATIONS', 'SHOW ALL BUSINESSUNITS', 'SHOW ALL LOCATIONS-BUSINESSUNITS' => $builder,
-            'SHOW SCOPE LOCATIONS' => $builder->whereIn('location_id', array_keys(LogHelper::getLocations($user))),
-            'SHOW SCOPE BUSINESSUNITS' => $builder->whereIn('business_unit_id', array_keys(LogHelper::getBusinessUnits($user))),
+            'SHOW SCOPE LOCATIONS' => $builder->whereIn("$tableName.location_id", array_keys(LogHelper::getLocations($user))),
+            'SHOW SCOPE BUSINESSUNITS' => $builder->whereIn("$tableName.business_unit_id", array_keys(LogHelper::getBusinessUnits($user))),
             'SHOW SCOPE LOCATIONS-BUSINESSUNITS' => $builder
-                ->whereIn(DB::raw("CONCAT(location_id, '-', business_unit_id)"), array_keys(LogHelper::getLocationsBusinessUnits($user))),
+                ->whereIn(DB::raw("CONCAT($tableName.location_id, '-', $tableName.business_unit_id)"), array_keys(LogHelper::getLocationsBusinessUnits($user))),
             'SHOW OWN LOCATIONS', 'SHOW OWN BUSINESSUNITS', 'SHOW OWN LOCATIONS-BUSINESSUNITS' => $builder
                 ->whereIn(with(new static)->getTable().'.id', function ($query) use ($user, $builder) {
                     $query->select('subject_id')
