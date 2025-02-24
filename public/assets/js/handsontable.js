@@ -86,7 +86,7 @@ class HandsontableWrapper {
         const wrapper = this;
 
         const columnDelimiter = '|~|';
-        const rowDelimiter = '\r\n';
+        const rowDelimiter = '|~~|';
         const nestedHeaders = wrapper.options.nestedHeaders
             ? this.trimEmptyBeginningOfNestedHeaderColumns(wrapper.options.nestedHeaders)
             : undefined;
