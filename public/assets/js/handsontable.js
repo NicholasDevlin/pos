@@ -49,6 +49,18 @@ class HandsontableWrapper {
         return `${this.tableId}__status-bar`;
     }
 
+    get tableButtons() {
+        return `${this.tableId}__buttons`;
+    }
+
+    get tableHiddenColumnsButtonKey() {
+        return `${this.tableId}__hidden-columns`;
+    }
+
+    get tableFilterRowsButtonKey() {
+        return `${this.tableId}__filter-rows`;
+    }
+
     #createTableWrapper() {
         document.getElementById(this.tableId).setAttribute('oncontextmenu', 'return false');
         document.getElementById(this.tableId).id = this.tableWrapper;
@@ -71,15 +83,58 @@ class HandsontableWrapper {
                 <div id="${this.tableStatusBar}" style="font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Helvetica Neue,Arial,sans-serif; font-size: 13px; margin-top: 0.75em;">
                     Showing <span class="filtered"></span> of <span class="total"></span> entries.
                 </div>
-                ${this.isExportEnabled ? `
-                    <button class="btn btn-sm btn-light mt-2" style="color: #56677d;" id="export-button-${this.tableId}" type="button">
-                        <i class="fa fa-table mr-1"></i> Export Excel
-                    </button>
-                ` : ''}
+                <div id="${this.tableButtons}" class="d-flex">
+                    <div id="hidden-columns-button-container" class="mr-1"></div>
+                    <div id="filter-rows-button-container" class="mr-1"></div>
+                    <div id="export-button-container">
+                        ${this.isExportEnabled ? `
+                            <button class="btn btn-sm btn-light mt-2" style="color: #56677d;" id="export-button-${this.tableId}" type="button">
+                                <i class="fa fa-table mr-1"></i> Export Excel
+                            </button>
+                        ` : ''}
+                    </div>
             </div>
         `;
 
         document.getElementById(this.tableWrapper).innerHTML += statusBar;
+    }
+
+    createTableResetHiddenColumnsButton() {
+        const button = `
+            ${!['[]', undefined].includes(localStorage[this.tableHiddenColumnsButtonKey]) ? `
+                 <button id="${this.tableHiddenColumnsButtonKey}" class="btn btn-sm btn-light mt-2" style="color: #56677d;" onclick="localStorage.removeItem('${this.tableHiddenColumnsButtonKey}'); location.reload();" type="button">
+                    <i class="fas fa-columns mr-1"></i> Reset Kolom
+                </button>
+            ` : ''}
+        `.trim();
+
+        if (!button) {
+            document.getElementById('hidden-columns-button-container').innerHTML = '';
+            return;
+        }
+
+        if (!document.getElementById(this.tableHiddenColumnsButtonKey)) {
+            document.getElementById('hidden-columns-button-container').innerHTML = button;
+        }
+    }
+
+    createTableResetFilterRowsButton() {
+        const button = `
+            ${!['[]', undefined].includes(localStorage[this.tableFilterRowsButtonKey]) ? `
+                 <button id="${this.tableFilterRowsButtonKey}" class="btn btn-sm btn-light mt-2" style="color: #56677d;" onclick="localStorage.removeItem('${this.tableFilterRowsButtonKey}'); location.reload();" type="button">
+                    <i class="feather feather-filter mr-1"></i> Reset Filter
+                </button>
+            ` : ''}
+        `.trim();
+
+        if (!button) {
+            document.getElementById('filter-rows-button-container').innerHTML = '';
+            return;
+        }
+
+        if (!document.getElementById(this.tableFilterRowsButtonKey)) {
+            document.getElementById('filter-rows-button-container').innerHTML = button;
+        }
     }
 
     attachExportButtonEvent(hot) {
@@ -88,7 +143,7 @@ class HandsontableWrapper {
         const columnDelimiter = '|~|';
         const rowDelimiter = '|~~|';
         const nestedHeaders = wrapper.options.nestedHeaders
-            ? this.trimEmptyBeginningOfNestedHeaderColumns(wrapper.options.nestedHeaders)
+            ? this.trimEmptyBeginningOfNestedHeaderColumns(JSON.parse(JSON.stringify(wrapper.options.nestedHeaders)))
             : undefined;
 
         $(`#export-button-${this.tableId}`).off('click').on('click', function() {
@@ -416,6 +471,7 @@ class HandsontableWrapper {
             manualColumnFreeze: false,
             multiColumnSorting: true,
             hiddenColumns: {
+                columns: JSON.parse(localStorage.getItem(`${this.tableHiddenColumnsButtonKey}`) ?? '[]'),
                 indicators: true,
             },
             contextMenu: ['hidden_columns_hide', 'hidden_columns_show'],
@@ -442,14 +498,42 @@ class HandsontableWrapper {
                 const totalRows = this.countRows();
                 const statusBarId = wrapper.tableStatusBar;
 
-                document.querySelector(`#${statusBarId} .filtered`).innerHTML = totalRows;
                 document.querySelector(`#${statusBarId} .total`).innerHTML = totalRows;
+
+                const instance = wrapper.hot;
+                const conditionsStack  = JSON.parse(localStorage.getItem(wrapper.tableFilterRowsButtonKey) ?? '[]');
+
+                if (instance && conditionsStack.length) {
+                    const filtersPlugin = instance.getPlugin('Filters');
+                    filtersPlugin.clearConditions();
+
+                    conditionsStack.forEach((stack) => {
+                        stack.conditions.forEach((condition) => {
+                            filtersPlugin.addCondition(stack.column, condition.name, condition.args, stack.operation);
+                        });
+                    });
+
+                    filtersPlugin.filter();
+                } else {
+                    document.querySelector(`#${statusBarId} .filtered`).innerHTML = totalRows;
+                }
             },
-            afterFilter: function () {
+            afterFilter: function (conditionsStack) {
+                localStorage.setItem(`${wrapper.tableFilterRowsButtonKey}`, JSON.stringify(conditionsStack));
+                wrapper.createTableResetFilterRowsButton();
+
                 document.querySelector(`#${wrapper.tableStatusBar} .filtered`).innerHTML = this.countRows();
             },
             afterRender: () => this.reloadUjs(),
             afterScroll: () => this.reloadUjs(),
+            afterHideColumns: function (_, destinationHideConfig) {
+                localStorage.setItem(`${wrapper.tableHiddenColumnsButtonKey}`, JSON.stringify(destinationHideConfig));
+                wrapper.createTableResetHiddenColumnsButton();
+            },
+            afterUnhideColumns: function (_, destinationHideConfig) {
+                localStorage.setItem(`${wrapper.tableHiddenColumnsButtonKey}`, JSON.stringify(destinationHideConfig));
+                wrapper.createTableResetHiddenColumnsButton();
+            },
             ...this.options,
         });
 
