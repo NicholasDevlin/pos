@@ -1,3 +1,4 @@
+{{-- blade-formatter-disable --}}
 @push('scripts')
     <script>
         const editPasswordHot = new HandsontableWrapper({

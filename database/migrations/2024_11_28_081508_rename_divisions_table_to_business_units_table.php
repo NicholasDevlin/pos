@@ -37,7 +37,7 @@ return new class extends Migration
 
         DB::statement('ALTER TABLE `model_has_scopes` RENAME INDEX `model_has_scopes_division_id_foreign` TO `model_has_scopes_business_unit_id_foreign`');
 
-        DB::statement(<<<QUERY
+        DB::statement(<<<'QUERY'
 UPDATE activity_log
 SET properties = REPLACE(properties, 'division_id', 'business_unit_id')
 WHERE properties LIKE '%division_id%'
@@ -57,7 +57,7 @@ QUERY);
             ->where('subject_type', 'App\Models\UserManagement\BusinessUnit')
             ->update(['subject_type' => 'App\Models\UserManagement\Division']);
 
-        DB::statement(<<<QUERY
+        DB::statement(<<<'QUERY'
 UPDATE activity_log
 SET properties = REPLACE(properties, 'business_unit_id', 'division_id')
 WHERE properties LIKE '%business_unit_id%'

@@ -1,3 +1,4 @@
+{{-- blade-formatter-disable --}}
 @php
     $metadata = [
         'title' => 'Lokasi',
