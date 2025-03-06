@@ -32,6 +32,12 @@
                     <li><a href="{{ route('user-management.logs') }}"><i class="feather-user-check"></i><span>Log Pengguna</span></a></li>
                 @endrole
 
+                {{-- |- - - - - - - - - - - -| --}}
+                {{-- |  Modules start here   | --}}
+                {{-- |- - - - - - - - - - - -| --}}
+
+                {{--   G O O D  L U C K !  ✨  --}}
+
                 @if (auth()->user()->hasRole('super-admin') ||
                         auth()->user()->canAny(['logs.show.all', 'logs.show.scope', 'logs.show.own']))
                     <li class="menu-title">Lainnya</li>
