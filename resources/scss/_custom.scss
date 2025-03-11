@@ -46,3 +46,18 @@ a[type=button] > * {
 .page-content {
     min-height: 100vh;
 }
+
+.menu-hidden {
+    &.vertical-menu {
+        display: none;
+    }
+    &#page-topbar {
+        padding-left: 0;
+    }
+    &.main-content {
+        margin-left: 0;
+    }
+    &.footer {
+        left: 0;
+    }
+}

@@ -1,7 +1,7 @@
 <header id="page-topbar">
     <div class="navbar-header">
         <div class="d-flex align-items-center">
-            <button class="btn btn-sm mr-2 d-lg-none header-item" id="vertical-menu-btn" type="button">
+            <button class="btn btn-sm mr-2 header-item" id="vertical-menu-btn" type="button">
                 <i class="fa fa-fw fa-bars"></i>
             </button>
             <div class="header-breadcumb">
