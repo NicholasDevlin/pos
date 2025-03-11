@@ -327,7 +327,7 @@ class HandsontableWrapper {
                 if (!worksheet["!rows"][ROW_2_INDEX]) worksheet["!rows"][ROW_2_INDEX] = { hpx: 22.5 }; // Headers
             }
 
-            XLSX.utils.book_append_sheet(workbook, worksheet, wrapper.truncateWithEllipsis(wrapper.title));
+            XLSX.utils.book_append_sheet(workbook, worksheet, wrapper.defineSheetName(wrapper.title));
 
             XLSX.writeFile(workbook, `${wrapper.title}${wrapper.programName !== null ? ' [' + wrapper.programName + ']' : ''} - ${new Date(Date.now() + (7 * 60 * 60 * 1000)).toISOString().replace(/[-T:Z.]/g, '').slice(0, 14)}.xlsx`, { compression: true });
 
@@ -444,12 +444,13 @@ class HandsontableWrapper {
         });
     }
 
-    truncateWithEllipsis(str) {
-        if (str.length > 31) {
-            return str.slice(0, 28) + "...";
+    defineSheetName(str) {
+        const sanitizedStr = str.replace(/[:\\/?\*\[\]]/g, '');
+        if (sanitizedStr.length > 31) {
+            return sanitizedStr.slice(0, 28) + "...";
         }
 
-        return str;
+        return sanitizedStr;
     }
 
     build() {
