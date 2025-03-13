@@ -1,11 +1,11 @@
+@php $version = \Illuminate\Support\Str::random(5); @endphp
 <script src="{{ asset('drezoc/js/jquery.min.js') }}"></script>
 <script src="{{ asset('drezoc/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('drezoc/js/metismenu.min.js') }}"></script>
 <script src="{{ asset('drezoc/js/simplebar.min.js') }}"></script>
 <script src="{{ asset('drezoc/js/waves.js') }}"></script>
-<script src="{{ asset('assets/js/theme.js') }}"></script>
+<script src="{{ asset('assets/js/theme.js') . "?v=$version" }}"></script>
 
-@php $version = \Illuminate\Support\Str::random(5); @endphp
 <script src="{{ asset('assets/plugins/jquery-ujs/src/rails.js') }}"></script>
 <script src="{{ asset('assets/js/ujs-modal.js') . "?v=$version" }}"></script>
 <script src="{{ asset('assets/plugins/handsontable/dist/handsontable.full.min.js') }}"></script>

@@ -36,14 +36,7 @@
 
     // Close vertical menu when clicking on overlay
     t(".menu-overlay").on("click", function() {
-        if (window.innerWidth > 992) {
-            t(".vertical-menu, #page-topbar, .main-content, .footer").removeClass("menu-hidden");
-
-            // Save the current state to localStorage
-            localStorage.setItem('verticalMenuState', 'opened');
-        } else {
-            t("body").removeClass("enable-vertical-menu");
-        }
+        t("body").removeClass("enable-vertical-menu");
     });
 
     // Set the active class for sidebar menu links based on current page
