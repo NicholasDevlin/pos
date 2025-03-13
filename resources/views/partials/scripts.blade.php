@@ -33,4 +33,4 @@
     @endsession
 </script>
 
-<script src="{{ asset('assets/js/default.js') }}"></script>
+<script src="{{ asset('assets/js/default.js') . "?v=$version" }}"></script>
