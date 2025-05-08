@@ -14,9 +14,9 @@ return /******/ (() => { // webpackBootstrap
 /* 1 */
 /***/ ((module) => {
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : {
-    "default": obj
+function _interopRequireDefault(e) {
+  return e && e.__esModule ? e : {
+    "default": e
   };
 }
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -57,7 +57,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__2__;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 var exports = __webpack_exports__;
@@ -111,6 +111,9 @@ const dictionary = {
   [C.CONTEXTMENU_ITEMS_MERGE_CELLS]: 'Spoji ćelije',
   [C.CONTEXTMENU_ITEMS_UNMERGE_CELLS]: 'Odvoji ćelije',
   [C.CONTEXTMENU_ITEMS_COPY]: 'Kopiraj',
+  [C.CONTEXTMENU_ITEMS_COPY_WITH_COLUMN_HEADERS]: ['Kopiraj sa zaglavljem', 'Kopiraj sa zaglavljima'],
+  [C.CONTEXTMENU_ITEMS_COPY_WITH_COLUMN_GROUP_HEADERS]: ['Kopiraj sa zaglavljem grupe', 'Kopiraj sa zaglavljima grupe'],
+  [C.CONTEXTMENU_ITEMS_COPY_COLUMN_HEADERS_ONLY]: ['Kopiraj samo zaglavlje', 'Kopiraj samo zaglavlja'],
   [C.CONTEXTMENU_ITEMS_CUT]: 'Iseci',
   [C.CONTEXTMENU_ITEMS_NESTED_ROWS_INSERT_CHILD]: 'Unesi ugnježdeni red',
   [C.CONTEXTMENU_ITEMS_NESTED_ROWS_DETACH_CHILD]: 'Odvoji ugnježdeni red',

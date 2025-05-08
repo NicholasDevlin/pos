@@ -112,9 +112,9 @@ var _default = exports["default"] = dictionary;
 /* 1 */
 /***/ ((module) => {
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : {
-    "default": obj
+function _interopRequireDefault(e) {
+  return e && e.__esModule ? e : {
+    "default": e
   };
 }
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
@@ -633,6 +633,109 @@ exports.__esModule = true;
 var _handsontable = _interopRequireDefault(__webpack_require__(2));
 /**
  * @preserve
+ * Authors: Ali Almasi
+ * Last updated: Jan 19, 2025
+ *
+ * Description: Definition file for Farsi - Iran language-country.
+ */
+
+const C = _handsontable.default.languages.dictionaryKeys;
+const dictionary = {
+  languageCode: 'fa-IR',
+  [C.CONTEXTMENU_ITEMS_NO_ITEMS]: 'هیچ گزینه ای در دسترس نیست',
+  [C.CONTEXTMENU_ITEMS_ROW_ABOVE]: 'درج ردیف در بالا',
+  [C.CONTEXTMENU_ITEMS_ROW_BELOW]: 'درج ردیف در پایین',
+  [C.CONTEXTMENU_ITEMS_INSERT_LEFT]: 'درج ستون در چپ',
+  [C.CONTEXTMENU_ITEMS_INSERT_RIGHT]: 'درج ستون در راست',
+  [C.CONTEXTMENU_ITEMS_REMOVE_ROW]: ['حذف ردیف', 'حذف ردیف ها'],
+  [C.CONTEXTMENU_ITEMS_REMOVE_COLUMN]: ['حذف ستون', 'حذف ستون ها'],
+  [C.CONTEXTMENU_ITEMS_UNDO]: 'واگرد',
+  [C.CONTEXTMENU_ITEMS_REDO]: 'بازگردانی',
+  [C.CONTEXTMENU_ITEMS_READ_ONLY]: 'فقط خواندنی',
+  [C.CONTEXTMENU_ITEMS_CLEAR_COLUMN]: 'پاک کردن ستون',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT]: 'تراز',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_LEFT]: 'چپ',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_CENTER]: 'وسط',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_RIGHT]: 'راست',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_JUSTIFY]: 'میزان',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_TOP]: 'بالا',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_MIDDLE]: 'میانه',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_BOTTOM]: 'پایین',
+  [C.CONTEXTMENU_ITEMS_FREEZE_COLUMN]: 'انجماد ستون',
+  [C.CONTEXTMENU_ITEMS_UNFREEZE_COLUMN]: 'باز کردن ستون',
+  [C.CONTEXTMENU_ITEMS_BORDERS]: 'مرز ها',
+  [C.CONTEXTMENU_ITEMS_BORDERS_TOP]: 'بالا',
+  [C.CONTEXTMENU_ITEMS_BORDERS_RIGHT]: 'راست',
+  [C.CONTEXTMENU_ITEMS_BORDERS_BOTTOM]: 'پایین',
+  [C.CONTEXTMENU_ITEMS_BORDERS_LEFT]: 'چپ',
+  [C.CONTEXTMENU_ITEMS_REMOVE_BORDERS]: 'حذف مرز (ها)',
+  [C.CONTEXTMENU_ITEMS_ADD_COMMENT]: 'افزودن کامنت',
+  [C.CONTEXTMENU_ITEMS_EDIT_COMMENT]: 'تغییر کامنت',
+  [C.CONTEXTMENU_ITEMS_REMOVE_COMMENT]: 'حذف کامنت',
+  [C.CONTEXTMENU_ITEMS_READ_ONLY_COMMENT]: 'فقط خواندنی کردن کامنت',
+  [C.CONTEXTMENU_ITEMS_MERGE_CELLS]: 'ادغام سلول ها',
+  [C.CONTEXTMENU_ITEMS_UNMERGE_CELLS]: 'جدا کردن سلول ها',
+  [C.CONTEXTMENU_ITEMS_COPY]: 'کپی',
+  [C.CONTEXTMENU_ITEMS_COPY_WITH_COLUMN_HEADERS]: ['کپی با سر ستون', 'کپی با سرستون ها'],
+  [C.CONTEXTMENU_ITEMS_COPY_WITH_COLUMN_GROUP_HEADERS]: ['کپی با سرستون گروه', 'کپی با سرستون گروه ها'],
+  [C.CONTEXTMENU_ITEMS_COPY_COLUMN_HEADERS_ONLY]: ['فقط کپی سرستون', 'فقط کپی سرستون ها'],
+  [C.CONTEXTMENU_ITEMS_CUT]: 'بریدن',
+  [C.CONTEXTMENU_ITEMS_NESTED_ROWS_INSERT_CHILD]: 'درج زیر ردیف',
+  [C.CONTEXTMENU_ITEMS_NESTED_ROWS_DETACH_CHILD]: 'جدا کردن از سرردیف',
+  [C.CONTEXTMENU_ITEMS_HIDE_COLUMN]: ['پنهان کردن ستون', 'پنهان کردن ستون ها'],
+  [C.CONTEXTMENU_ITEMS_SHOW_COLUMN]: ['نمایش ستون', 'نمایش ستون ها'],
+  [C.CONTEXTMENU_ITEMS_HIDE_ROW]: ['پنهان کردن ردیف', 'پنهان کردن ردیف ها'],
+  [C.CONTEXTMENU_ITEMS_SHOW_ROW]: ['نمایش ردیف', 'نمایش ردیف ها'],
+  [C.FILTERS_CONDITIONS_NONE]: 'هیچ',
+  [C.FILTERS_CONDITIONS_EMPTY]: 'خالی است',
+  [C.FILTERS_CONDITIONS_NOT_EMPTY]: 'خالی نیست',
+  [C.FILTERS_CONDITIONS_EQUAL]: 'برابر است با',
+  [C.FILTERS_CONDITIONS_NOT_EQUAL]: 'برابر نیست با',
+  [C.FILTERS_CONDITIONS_BEGINS_WITH]: 'شروع می شود با',
+  [C.FILTERS_CONDITIONS_ENDS_WITH]: 'پایان می یابد با',
+  [C.FILTERS_CONDITIONS_CONTAINS]: 'شامل می شود',
+  [C.FILTERS_CONDITIONS_NOT_CONTAIN]: 'شامل نمی شود',
+  [C.FILTERS_CONDITIONS_GREATER_THAN]: 'بزرگ تر',
+  [C.FILTERS_CONDITIONS_GREATER_THAN_OR_EQUAL]: 'بزرگتر مساوی',
+  [C.FILTERS_CONDITIONS_LESS_THAN]: 'کوچکتر',
+  [C.FILTERS_CONDITIONS_LESS_THAN_OR_EQUAL]: 'کوچکتر مساوی',
+  [C.FILTERS_CONDITIONS_BETWEEN]: 'در میان است',
+  [C.FILTERS_CONDITIONS_NOT_BETWEEN]: 'در میان نیست',
+  [C.FILTERS_CONDITIONS_AFTER]: 'بعد',
+  [C.FILTERS_CONDITIONS_BEFORE]: 'قبل',
+  [C.FILTERS_CONDITIONS_TODAY]: 'امروز',
+  [C.FILTERS_CONDITIONS_TOMORROW]: 'فردا',
+  [C.FILTERS_CONDITIONS_YESTERDAY]: 'دیروز',
+  [C.FILTERS_VALUES_BLANK_CELLS]: 'سلول های خالی',
+  [C.FILTERS_DIVS_FILTER_BY_CONDITION]: 'فیلتر بر اساس شرایط',
+  [C.FILTERS_DIVS_FILTER_BY_VALUE]: 'فیلتر بر اساس مقدار',
+  [C.FILTERS_LABELS_CONJUNCTION]: 'و',
+  [C.FILTERS_LABELS_DISJUNCTION]: 'یا',
+  [C.FILTERS_BUTTONS_SELECT_ALL]: 'انتخاب همه',
+  [C.FILTERS_BUTTONS_CLEAR]: 'پاک کردن',
+  [C.FILTERS_BUTTONS_OK]: 'تایید',
+  [C.FILTERS_BUTTONS_CANCEL]: 'لغو',
+  [C.FILTERS_BUTTONS_PLACEHOLDER_SEARCH]: 'جستجو',
+  [C.FILTERS_BUTTONS_PLACEHOLDER_VALUE]: 'مقدار',
+  [C.FILTERS_BUTTONS_PLACEHOLDER_SECOND_VALUE]: 'مقدار دوم',
+  [C.CHECKBOX_CHECKED]: 'چک شده',
+  [C.CHECKBOX_UNCHECKED]: 'چک نشده'
+};
+_handsontable.default.languages.registerLanguageDictionary(dictionary);
+var _default = exports["default"] = dictionary;
+
+/***/ }),
+/* 9 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(1);
+exports.__esModule = true;
+var _handsontable = _interopRequireDefault(__webpack_require__(2));
+/**
+ * @preserve
  * Authors: Stefan Salzl, Thomas Senn
  * Last updated: Feb 05, 2018
  *
@@ -719,8 +822,111 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 9 */,
 /* 10 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(1);
+exports.__esModule = true;
+var _handsontable = _interopRequireDefault(__webpack_require__(2));
+/**
+ * @preserve
+ * Authors: Domagoj Lončarić & Ante Živković
+ * Last updated: Jan 31, 2024
+ *
+ * Description: Definition file for Croatian - Croatia language-country.
+ */
+
+const C = _handsontable.default.languages.dictionaryKeys;
+const dictionary = {
+  languageCode: 'hr-HR',
+  [C.CONTEXTMENU_ITEMS_NO_ITEMS]: 'Nema dostupnih mogućnosti',
+  [C.CONTEXTMENU_ITEMS_ROW_ABOVE]: 'Umetni redak iznad',
+  [C.CONTEXTMENU_ITEMS_ROW_BELOW]: 'Umetni redak ispod',
+  [C.CONTEXTMENU_ITEMS_INSERT_LEFT]: 'Umetni stupac lijevo',
+  [C.CONTEXTMENU_ITEMS_INSERT_RIGHT]: 'Umetni stupac desno',
+  [C.CONTEXTMENU_ITEMS_REMOVE_ROW]: ['Ukloni redak', 'Ukloni retke'],
+  [C.CONTEXTMENU_ITEMS_REMOVE_COLUMN]: ['Ukloni stupac', 'Ukloni stupce'],
+  [C.CONTEXTMENU_ITEMS_UNDO]: 'Poništi',
+  [C.CONTEXTMENU_ITEMS_REDO]: 'Ponovi',
+  [C.CONTEXTMENU_ITEMS_READ_ONLY]: 'Samo za čitanje',
+  [C.CONTEXTMENU_ITEMS_CLEAR_COLUMN]: 'Očisti stupac',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT]: 'Poravnanje',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_LEFT]: 'Lijevo',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_CENTER]: 'Centar',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_RIGHT]: 'Desno',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_JUSTIFY]: 'Obostrano',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_TOP]: 'Gore',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_MIDDLE]: 'Sredina',
+  [C.CONTEXTMENU_ITEMS_ALIGNMENT_BOTTOM]: 'Dolje',
+  [C.CONTEXTMENU_ITEMS_FREEZE_COLUMN]: 'Zamrzni stupac',
+  [C.CONTEXTMENU_ITEMS_UNFREEZE_COLUMN]: 'Odmrzni stupac',
+  [C.CONTEXTMENU_ITEMS_BORDERS]: 'Granice',
+  [C.CONTEXTMENU_ITEMS_BORDERS_TOP]: 'Gore',
+  [C.CONTEXTMENU_ITEMS_BORDERS_RIGHT]: 'Desno',
+  [C.CONTEXTMENU_ITEMS_BORDERS_BOTTOM]: 'Dolje',
+  [C.CONTEXTMENU_ITEMS_BORDERS_LEFT]: 'Lijevo',
+  [C.CONTEXTMENU_ITEMS_REMOVE_BORDERS]: 'Ukloni granicu(e)',
+  [C.CONTEXTMENU_ITEMS_ADD_COMMENT]: 'Dodaj komentar',
+  [C.CONTEXTMENU_ITEMS_EDIT_COMMENT]: 'Uredi komentar',
+  [C.CONTEXTMENU_ITEMS_REMOVE_COMMENT]: 'Izbriši komentar',
+  [C.CONTEXTMENU_ITEMS_READ_ONLY_COMMENT]: 'Komentar samo za čitanje',
+  [C.CONTEXTMENU_ITEMS_MERGE_CELLS]: 'Spoji čelije',
+  [C.CONTEXTMENU_ITEMS_UNMERGE_CELLS]: 'Razdijeli čelije',
+  [C.CONTEXTMENU_ITEMS_COPY]: 'Kopiraj',
+  [C.CONTEXTMENU_ITEMS_COPY_WITH_COLUMN_HEADERS]: ['Kopiraj sa zaglavljem', 'Kopiraj sa zaglavljima'],
+  [C.CONTEXTMENU_ITEMS_COPY_WITH_COLUMN_GROUP_HEADERS]: ['Kopiraj sa grupnim zaglavljem', 'Kopiraj sa grupnim zaglavljima'],
+  [C.CONTEXTMENU_ITEMS_COPY_COLUMN_HEADERS_ONLY]: ['Kopiraj samo zaglavlje', 'Kopiraj samo zaglavlja'],
+  [C.CONTEXTMENU_ITEMS_CUT]: 'Izreži',
+  [C.CONTEXTMENU_ITEMS_NESTED_ROWS_INSERT_CHILD]: 'Umetni ugniježđeni redak',
+  [C.CONTEXTMENU_ITEMS_NESTED_ROWS_DETACH_CHILD]: 'Odvoji ugniježđeni redak',
+  [C.CONTEXTMENU_ITEMS_HIDE_COLUMN]: ['Sakrij stupac', 'Sakrij stupce'],
+  [C.CONTEXTMENU_ITEMS_SHOW_COLUMN]: ['Prikaži stupac', 'Prikaži stupce'],
+  [C.CONTEXTMENU_ITEMS_HIDE_ROW]: ['Sakrij redak', 'Sakrij retke'],
+  [C.CONTEXTMENU_ITEMS_SHOW_ROW]: ['Prikaži redak', 'Prikaži retke'],
+  [C.FILTERS_CONDITIONS_NONE]: 'Ništa',
+  [C.FILTERS_CONDITIONS_EMPTY]: 'Prazno',
+  [C.FILTERS_CONDITIONS_NOT_EMPTY]: 'Nije prazno',
+  [C.FILTERS_CONDITIONS_EQUAL]: 'Jednako',
+  [C.FILTERS_CONDITIONS_NOT_EQUAL]: 'Nije jednako',
+  [C.FILTERS_CONDITIONS_BEGINS_WITH]: 'Počinje s',
+  [C.FILTERS_CONDITIONS_ENDS_WITH]: 'Završava s',
+  [C.FILTERS_CONDITIONS_CONTAINS]: 'Sadrži',
+  [C.FILTERS_CONDITIONS_NOT_CONTAIN]: 'Ne sadrži',
+  [C.FILTERS_CONDITIONS_GREATER_THAN]: 'Veće od',
+  [C.FILTERS_CONDITIONS_GREATER_THAN_OR_EQUAL]: 'Veće ili jednako od',
+  [C.FILTERS_CONDITIONS_LESS_THAN]: 'Manje od',
+  [C.FILTERS_CONDITIONS_LESS_THAN_OR_EQUAL]: 'Manje ili jednako od',
+  [C.FILTERS_CONDITIONS_BETWEEN]: 'Između',
+  [C.FILTERS_CONDITIONS_NOT_BETWEEN]: 'Nije između',
+  [C.FILTERS_CONDITIONS_AFTER]: 'Nakon',
+  [C.FILTERS_CONDITIONS_BEFORE]: 'Prije',
+  [C.FILTERS_CONDITIONS_TODAY]: 'Danas',
+  [C.FILTERS_CONDITIONS_TOMORROW]: 'Sutra',
+  [C.FILTERS_CONDITIONS_YESTERDAY]: 'Jučer',
+  [C.FILTERS_VALUES_BLANK_CELLS]: 'Prazna polja',
+  [C.FILTERS_DIVS_FILTER_BY_CONDITION]: 'Filtriraj po uvjetu',
+  [C.FILTERS_DIVS_FILTER_BY_VALUE]: 'Filtriraj po vrijednosti',
+  [C.FILTERS_LABELS_CONJUNCTION]: 'I',
+  [C.FILTERS_LABELS_DISJUNCTION]: 'Ili',
+  [C.FILTERS_BUTTONS_SELECT_ALL]: 'Odaberi sve',
+  [C.FILTERS_BUTTONS_CLEAR]: 'Očisti',
+  [C.FILTERS_BUTTONS_OK]: 'U redu',
+  [C.FILTERS_BUTTONS_CANCEL]: 'Odustani',
+  [C.FILTERS_BUTTONS_PLACEHOLDER_SEARCH]: 'Pretraži',
+  [C.FILTERS_BUTTONS_PLACEHOLDER_VALUE]: 'Vrijednost',
+  [C.FILTERS_BUTTONS_PLACEHOLDER_SECOND_VALUE]: 'Druga vrijednost',
+  [C.CHECKBOX_CHECKED]: 'Označeno',
+  [C.CHECKBOX_UNCHECKED]: 'Nije označeno'
+};
+_handsontable.default.languages.registerLanguageDictionary(dictionary);
+var _default = exports["default"] = dictionary;
+
+/***/ }),
+/* 11 */,
+/* 12 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -773,6 +979,9 @@ const dictionary = {
   [C.CONTEXTMENU_ITEMS_MERGE_CELLS]: 'Unisci celle',
   [C.CONTEXTMENU_ITEMS_UNMERGE_CELLS]: 'Separa celle',
   [C.CONTEXTMENU_ITEMS_COPY]: 'Copia',
+  [C.CONTEXTMENU_ITEMS_COPY_WITH_COLUMN_HEADERS]: ['Copia con intestazione', 'Copia con intestazioni'],
+  [C.CONTEXTMENU_ITEMS_COPY_WITH_COLUMN_GROUP_HEADERS]: 'Copia con intestazione completa',
+  [C.CONTEXTMENU_ITEMS_COPY_COLUMN_HEADERS_ONLY]: ['Copia solo intestazione', 'Copia solo intestazioni'],
   [C.CONTEXTMENU_ITEMS_CUT]: 'Taglia',
   [C.CONTEXTMENU_ITEMS_NESTED_ROWS_INSERT_CHILD]: 'Inserisci riga figlia',
   [C.CONTEXTMENU_ITEMS_NESTED_ROWS_DETACH_CHILD]: 'Scollega da riga madre',
@@ -817,7 +1026,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -917,7 +1126,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1014,7 +1223,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1115,7 +1324,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1212,7 +1421,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1312,7 +1521,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1415,7 +1624,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1512,7 +1721,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1609,7 +1818,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1663,6 +1872,9 @@ const dictionary = {
   [C.CONTEXTMENU_ITEMS_MERGE_CELLS]: 'Spoji ćelije',
   [C.CONTEXTMENU_ITEMS_UNMERGE_CELLS]: 'Odvoji ćelije',
   [C.CONTEXTMENU_ITEMS_COPY]: 'Kopiraj',
+  [C.CONTEXTMENU_ITEMS_COPY_WITH_COLUMN_HEADERS]: ['Kopiraj sa zaglavljem', 'Kopiraj sa zaglavljima'],
+  [C.CONTEXTMENU_ITEMS_COPY_WITH_COLUMN_GROUP_HEADERS]: ['Kopiraj sa zaglavljem grupe', 'Kopiraj sa zaglavljima grupe'],
+  [C.CONTEXTMENU_ITEMS_COPY_COLUMN_HEADERS_ONLY]: ['Kopiraj samo zaglavlje', 'Kopiraj samo zaglavlja'],
   [C.CONTEXTMENU_ITEMS_CUT]: 'Iseci',
   [C.CONTEXTMENU_ITEMS_NESTED_ROWS_INSERT_CHILD]: 'Unesi ugnježdeni red',
   [C.CONTEXTMENU_ITEMS_NESTED_ROWS_DETACH_CHILD]: 'Odvoji ugnježdeni red',
@@ -1707,7 +1919,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1807,7 +2019,7 @@ _handsontable.default.languages.registerLanguageDictionary(dictionary);
 var _default = exports["default"] = dictionary;
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1932,7 +2144,7 @@ var _default = exports["default"] = dictionary;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 var exports = __webpack_exports__;
@@ -1952,31 +2164,35 @@ var _enUS = _interopRequireDefault(__webpack_require__(6));
 exports.enUS = _enUS.default;
 var _esMX = _interopRequireDefault(__webpack_require__(7));
 exports.esMX = _esMX.default;
-var _frFR = _interopRequireDefault(__webpack_require__(8));
+var _faIR = _interopRequireDefault(__webpack_require__(8));
+exports.faIR = _faIR.default;
+var _frFR = _interopRequireDefault(__webpack_require__(9));
 exports.frFR = _frFR.default;
-var _itIT = _interopRequireDefault(__webpack_require__(10));
+var _hrHR = _interopRequireDefault(__webpack_require__(10));
+exports.hrHR = _hrHR.default;
+var _itIT = _interopRequireDefault(__webpack_require__(12));
 exports.itIT = _itIT.default;
-var _jaJP = _interopRequireDefault(__webpack_require__(11));
+var _jaJP = _interopRequireDefault(__webpack_require__(13));
 exports.jaJP = _jaJP.default;
-var _koKR = _interopRequireDefault(__webpack_require__(12));
+var _koKR = _interopRequireDefault(__webpack_require__(14));
 exports.koKR = _koKR.default;
-var _lvLV = _interopRequireDefault(__webpack_require__(13));
+var _lvLV = _interopRequireDefault(__webpack_require__(15));
 exports.lvLV = _lvLV.default;
-var _nbNO = _interopRequireDefault(__webpack_require__(14));
+var _nbNO = _interopRequireDefault(__webpack_require__(16));
 exports.nbNO = _nbNO.default;
-var _nlNL = _interopRequireDefault(__webpack_require__(15));
+var _nlNL = _interopRequireDefault(__webpack_require__(17));
 exports.nlNL = _nlNL.default;
-var _plPL = _interopRequireDefault(__webpack_require__(16));
+var _plPL = _interopRequireDefault(__webpack_require__(18));
 exports.plPL = _plPL.default;
-var _ptBR = _interopRequireDefault(__webpack_require__(17));
+var _ptBR = _interopRequireDefault(__webpack_require__(19));
 exports.ptBR = _ptBR.default;
-var _ruRU = _interopRequireDefault(__webpack_require__(18));
+var _ruRU = _interopRequireDefault(__webpack_require__(20));
 exports.ruRU = _ruRU.default;
-var _srSP = _interopRequireDefault(__webpack_require__(19));
+var _srSP = _interopRequireDefault(__webpack_require__(21));
 exports.srSP = _srSP.default;
-var _zhCN = _interopRequireDefault(__webpack_require__(20));
+var _zhCN = _interopRequireDefault(__webpack_require__(22));
 exports.zhCN = _zhCN.default;
-var _zhTW = _interopRequireDefault(__webpack_require__(21));
+var _zhTW = _interopRequireDefault(__webpack_require__(23));
 exports.zhTW = _zhTW.default;
 })();
 

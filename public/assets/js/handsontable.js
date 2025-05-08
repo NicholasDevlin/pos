@@ -54,11 +54,11 @@ class HandsontableWrapper {
     }
 
     get tableHiddenColumnsButtonKey() {
-        return `${this.tableId}__hidden-columns`;
+        return `${window.location.pathname}__${this.tableId}__hidden-columns`;
     }
 
     get tableFilterRowsButtonKey() {
-        return `${this.tableId}__filter-rows`;
+        return `${window.location.pathname}__${this.tableId}__filter-rows`;
     }
 
     #createTableWrapper() {
@@ -109,12 +109,12 @@ class HandsontableWrapper {
         `.trim();
 
         if (!button) {
-            document.getElementById('hidden-columns-button-container').innerHTML = '';
+            $(`#${this.tableWrapper} #hidden-columns-button-container`).html('');
             return;
         }
 
         if (!document.getElementById(this.tableHiddenColumnsButtonKey)) {
-            document.getElementById('hidden-columns-button-container').innerHTML = button;
+            $(`#${this.tableWrapper} #hidden-columns-button-container`).html(button);
         }
     }
 
@@ -128,12 +128,12 @@ class HandsontableWrapper {
         `.trim();
 
         if (!button) {
-            document.getElementById('filter-rows-button-container').innerHTML = '';
+            $(`#${this.tableWrapper} #filter-rows-button-container`).html('');
             return;
         }
 
         if (!document.getElementById(this.tableFilterRowsButtonKey)) {
-            document.getElementById('filter-rows-button-container').innerHTML = button;
+            $(`#${this.tableWrapper} #filter-rows-button-container`).html(button);
         }
     }
 
