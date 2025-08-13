@@ -99,6 +99,43 @@ class HandsontableWrapper {
         document.getElementById(this.tableWrapper).innerHTML += statusBar;
     }
 
+    initiateMutationObserver() {
+        const dropdownMenu = document.querySelector('.htDropdownMenu');
+        if (!dropdownMenu) return; // Because column headers on some tables doesn't have filtering, hence no dropdown arrow, hence no dropdown menu found
+
+        let throttleTimeout = null;
+
+        const observer = new MutationObserver((mutations) => {
+            if (throttleTimeout) return;
+
+            throttleTimeout = setTimeout(() => {
+                mutations.forEach((mutation) => {
+                    const tbody = dropdownMenu.querySelector('tbody[role="rowgroup"]');
+                    const checkboxCount = tbody?.querySelectorAll('input[type="checkbox"]').length;
+                    const checkedCheckboxCount = tbody?.querySelectorAll('input[type="checkbox"]:checked').length;
+
+                    if (mutation.target.className.includes('htDropdownMenu') && checkedCheckboxCount === checkboxCount) {
+                        dropdownMenu.querySelector('div.htUIClearAll a')?.click();
+                    }
+
+                    const checkboxLabels = dropdownMenu.querySelectorAll('.htCheckboxRendererLabel');
+                    checkboxLabels.forEach((label) => {
+                        const span = label.querySelector('span');
+                        const decodedLabel = this.decodeHtml(span.innerHTML);
+
+                        if (span.innerHTML !== decodedLabel) {
+                            span.innerHTML = decodedLabel;
+                        }
+                    });
+
+                    throttleTimeout = null;
+                }, 200);
+            });
+        });
+
+        observer.observe(dropdownMenu, { childList: true, subtree: true });
+    }
+
     createTableResetHiddenColumnsButton() {
         const button = `
             ${!['[]', undefined].includes(localStorage[this.tableHiddenColumnsButtonKey]) ? `
@@ -337,6 +374,12 @@ class HandsontableWrapper {
         });
     }
 
+    decodeHtml(html) {
+        const txt = document.createElement('textarea');
+        txt.innerHTML = html;
+        return txt.value;
+    }
+
     checkIsContainsHTMLTag(str) {
         return /<[a-z][\s\S]*>/i.test(str);
     }
@@ -502,7 +545,7 @@ class HandsontableWrapper {
                 document.querySelector(`#${statusBarId} .total`).innerHTML = totalRows;
 
                 const instance = wrapper.hot;
-                const conditionsStack  = JSON.parse(localStorage.getItem(wrapper.tableFilterRowsButtonKey) ?? '[]');
+                const conditionsStack = JSON.parse(localStorage.getItem(wrapper.tableFilterRowsButtonKey) ?? '[]');
 
                 if (instance && conditionsStack.length) {
                     const filtersPlugin = instance.getPlugin('Filters');
@@ -539,6 +582,8 @@ class HandsontableWrapper {
         });
 
         if (this.isExportEnabled) this.attachExportButtonEvent(this.hot);
+
+        this.initiateMutationObserver();
 
         return wrapper;
     }
