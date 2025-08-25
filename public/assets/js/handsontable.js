@@ -6,6 +6,7 @@ class HandsontableWrapper {
         this.title = title;
         this.isExportEnabled = isExportEnabled;
         this.hot = null;
+        this.parser = new DOMParser();
 
         this.#createTableWrapper();
         this.#createTableContainer();
@@ -100,40 +101,45 @@ class HandsontableWrapper {
     }
 
     initiateMutationObserver() {
-        const dropdownMenu = document.querySelector('.htDropdownMenu');
-        if (!dropdownMenu) return; // Because column headers on some tables doesn't have filtering, hence no dropdown arrow, hence no dropdown menu found
+        const dropdownMenus = document.querySelectorAll('.htDropdownMenu');
+        if (dropdownMenus.length === 0) return;
 
         let throttleTimeout = null;
 
-        const observer = new MutationObserver((mutations) => {
+        const isTargetIncludeClassName = (node, className) => node instanceof Node && node.classList.contains(className);
+
+        const observer = new MutationObserver((mutationList) => {
             if (throttleTimeout) return;
 
             throttleTimeout = setTimeout(() => {
-                mutations.forEach((mutation) => {
+                dropdownMenus.forEach((dropdownMenu) => {
                     const tbody = dropdownMenu.querySelector('tbody[role="rowgroup"]');
                     const checkboxCount = tbody?.querySelectorAll('input[type="checkbox"]').length;
                     const checkedCheckboxCount = tbody?.querySelectorAll('input[type="checkbox"]:checked').length;
 
-                    if (mutation.target.className.includes('htDropdownMenu') && checkedCheckboxCount === checkboxCount) {
+                    const isOpenDropdownMenu = Array.prototype.some.call(mutationList, (m) => isTargetIncludeClassName(m.target, 'htDropdownMenu'));
+
+                    if (isOpenDropdownMenu && checkedCheckboxCount === checkboxCount) {
                         dropdownMenu.querySelector('div.htUIClearAll a')?.click();
                     }
 
-                    const checkboxLabels = dropdownMenu.querySelectorAll('.htCheckboxRendererLabel');
-                    checkboxLabels.forEach((label) => {
-                        const span = label.querySelector('span');
-                        const decodedLabel = this.decodeHtml(span.innerHTML);
+                    dropdownMenu.querySelectorAll('.htCheckboxRendererLabel')
+                        .forEach((label) => {
+                            const span = label.querySelector('span');
 
-                        if (span.innerHTML !== decodedLabel) {
-                            span.innerHTML = decodedLabel;
-                        }
-                    });
+                            if (/&(?:lt|gt|amp|quot|#\d+|#x[a-fA-F0-9]+);/.test(span.innerHTML)) {
+                                span.innerHTML = this.decodeHtml(span.innerHTML);
+                            }
+                        });
+                });
 
-                    throttleTimeout = null;
-                }, 200);
-            });
+                throttleTimeout = null;
+            }, 200);
         });
 
-        observer.observe(dropdownMenu, { childList: true, subtree: true });
+        dropdownMenus.forEach((dropdownMenu) => {
+            observer.observe(dropdownMenu, { childList: true, subtree: true });
+        });
     }
 
     createTableResetHiddenColumnsButton() {
@@ -375,9 +381,8 @@ class HandsontableWrapper {
     }
 
     decodeHtml(html) {
-        const txt = document.createElement('textarea');
-        txt.innerHTML = html;
-        return txt.value;
+        const doc = this.parser.parseFromString(html, 'text/html');
+        return doc.documentElement.textContent;
     }
 
     checkIsContainsHTMLTag(str) {
