@@ -50,6 +50,8 @@
                     @canany(['logs.show.all', 'logs.show.scope', 'logs.show.own'])
                         <li><a href="{{ route('logs') }}"><i class="feather-trending-up"></i><span>Log Aktivitas</span></a></li>
                     @endcanany
+
+                    <li><a href="/log-viewer"><i class="feather-alert-triangle"></i><span>Log Aplikasi</span></a></li>
                 @endif
             </ul>
         </div>
