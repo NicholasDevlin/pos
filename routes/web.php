@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\MasterData\CustomerController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserManagement\AuthenticationLogController;
@@ -36,6 +37,10 @@ Route::group(['middleware' => ['prevent-back-history', 'auth', 'show-debugbar']]
             Route::post('/download-template', 'dataInitiationDownloadTemplate')->name('data-initiation.download-template');
             Route::post('/import', 'dataInitiationImport')->name('data-initiation.import');
         });
+    });
+
+    Route::group(['prefix' => 'master-data'], function () {
+        Route::resource('customers', CustomerController::class);
     });
 
     Route::resource('options', OptionController::class);
