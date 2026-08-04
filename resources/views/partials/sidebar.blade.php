@@ -36,11 +36,15 @@
                 {{-- |  Modules start here   | --}}
                 {{-- |- - - - - - - - - - - -| --}}
 
-                @canany(['customers.show'])
+                @canany(['customers.show', 'product_categories.show'])
                     <li class="menu-title">Master Data</li>
 
                     @canany(['customers.show'])
                         <li><a href="{{ route('customers.index') }}"><i class="feather-user"></i><span>Customer</span></a></li>
+                    @endcanany
+
+                    @canany(['product_categories.show'])
+                        <li><a href="{{ route('product-categories.index') }}"><i class="feather-box"></i><span>Kategori Produk</span></a></li>
                     @endcanany
                 @endcanany
                 {{--   G O O D  L U C K !  ✨  --}}
