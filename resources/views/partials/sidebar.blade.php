@@ -36,15 +36,19 @@
                 {{-- |  Modules start here   | --}}
                 {{-- |- - - - - - - - - - - -| --}}
 
-                @canany(['customers.show', 'product_categories.show'])
+                @canany(['customers.show', 'units-of-measure.show', 'product_categories.show'])
                     <li class="menu-title">Master Data</li>
 
                     @canany(['customers.show'])
                         <li><a href="{{ route('customers.index') }}"><i class="feather-user"></i><span>Customer</span></a></li>
                     @endcanany
 
+                    @canany(['units-of-measure.show'])
+                        <li><a href="{{ route('units-of-measure.index') }}"><i class="feather-thermometer"></i><span>Satuan Ukuran</span></a></li>
+                    @endcanany
+
                     @canany(['product_categories.show'])
-                        <li><a href="{{ route('product-categories.index') }}"><i class="feather-box"></i><span>Kategori Produk</span></a></li>
+                        <li><a href="{{ route('product-categories.index') }}"><i class="feather-grid"></i><span>Kategori Produk</span></a></li>
                     @endcanany
                 @endcanany
                 {{--   G O O D  L U C K !  ✨  --}}
