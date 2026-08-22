@@ -3,10 +3,10 @@
         <div class="navbar-brand-box mt-3">
             <a class="logo" href="/">
                 <span>
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="" height="30">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="" height="80">
                 </span>
                 <i>
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="" height="48">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="" height="80">
                 </i>
             </a>
         </div>
@@ -36,7 +36,7 @@
                 {{-- |  Modules start here   | --}}
                 {{-- |- - - - - - - - - - - -| --}}
 
-                @canany(['customers.show', 'units-of-measure.show', 'product_categories.show'])
+                @canany(['customers.show', 'units-of-measure.show', 'product_categories.show', 'products.show'])
                     <li class="menu-title">Master Data</li>
 
                     @canany(['customers.show'])
@@ -49,6 +49,10 @@
 
                     @canany(['product_categories.show'])
                         <li><a href="{{ route('product-categories.index') }}"><i class="feather-grid"></i><span>Kategori Produk</span></a></li>
+                    @endcanany
+
+                    @canany(['products.show'])
+                        <li><a href="{{ route('products.index') }}"><i class="feather-package"></i><span>Produk</span></a></li>
                     @endcanany
                 @endcanany
                 {{--   G O O D  L U C K !  ✨  --}}

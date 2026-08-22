@@ -20,3 +20,14 @@ if (! function_exists('global_config')) {
         }
     }
 }
+
+if (! function_exists('decimal_number_format')) {
+    function decimal_number_format(int|float|string|null $num, int $decimals = 2, ?string $decimal_separator = ',', ?string $thousands_separator = '.'): string
+    {
+        if (is_null($num)) {
+            return '';
+        }
+
+        return rtrim(rtrim(number_format((float) $num, $decimals, $decimal_separator, $thousands_separator), '0'), $decimal_separator);
+    }
+}

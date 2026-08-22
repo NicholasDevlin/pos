@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\MasterData\CustomerController;
 use App\Http\Controllers\MasterData\ProductCategoryController;
+use App\Http\Controllers\MasterData\ProductController;
 use App\Http\Controllers\MasterData\UnitOfMeasureController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\PageController;
@@ -45,6 +46,7 @@ Route::group(['middleware' => ['prevent-back-history', 'auth', 'show-debugbar']]
         Route::resource('customers', CustomerController::class);
         Route::resource('units-of-measure', UnitOfMeasureController::class);
         Route::resource('product-categories', ProductCategoryController::class);
+        Route::resource('products', ProductController::class);
     });
 
     Route::resource('options', OptionController::class);
