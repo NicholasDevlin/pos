@@ -19,6 +19,7 @@ class ProductCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'code' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
             'status' => ['required', Rule::in(array_keys(ProductCategory::statusList()))],
@@ -28,6 +29,7 @@ class ProductCategoryRequest extends FormRequest
     public function filters(): array
     {
         return [
+            'code' => ['trim', 'strip_tags', 'upper_case'],
             'name' => ['trim', 'strip_tags'],
             'notes' => ['trim', 'strip_tags'],
         ];

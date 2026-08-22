@@ -12,6 +12,7 @@ return new class extends Migration
         Schema::create('product_categories', function (Blueprint $table) {
             $table->id();
 
+            $table->string('code')->unique();
             $table->string('name');
             $table->text('notes')->nullable();
             $table->char('status', 1)->default(ProductCategory::STATUS_ACTIVE);

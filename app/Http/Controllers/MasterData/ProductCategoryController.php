@@ -29,7 +29,7 @@ class ProductCategoryController extends Controller
     private function tableData(): Collection
     {
         return ProductCategory::orderByDesc('updated_at')
-            ->get(['id', 'name', 'notes', 'status', 'created_at', 'updated_at'])
+            ->get(['id', 'code', 'name', 'notes', 'status', 'created_at', 'updated_at'])
             ->map(function ($datum) {
                 $datum->actions = implode(' ', array_filter([
                     "<a class='btn btn-xs btn-secondary' data-remote='true' href='".route('product-categories.edit', [$datum->id])."' title='Edit'><i class='feather-edit-2 text-white'></i></a>",

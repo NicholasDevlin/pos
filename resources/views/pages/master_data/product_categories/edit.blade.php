@@ -18,6 +18,21 @@
 @section('content')
     <div class="form-group mb-4">
         @php
+            $label = 'Kode';
+            $name = 'code';
+        @endphp
+        {{ html()->label($label, $name) }}
+        <span class="text-danger">*</span>
+
+        {{ html()->text($name)->class('form-control' . ($errors->has($name) ? ' is-invalid' : '')) }}
+
+        @error($name)
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="form-group mb-4">
+        @php
             $label = 'Nama';
             $name = 'name';
         @endphp

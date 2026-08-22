@@ -30,6 +30,7 @@
         }, {
             columns: [
                 { data: 'actions', renderer: 'html', className: 'htActions htMiddle' },
+                { data: 'code', title: 'Kode' },
                 { data: 'name', title: 'Nama' },
                 { data: 'notes', title: 'Keterangan' },
                 { data: 'status', title: 'Status', renderer: 'html' },

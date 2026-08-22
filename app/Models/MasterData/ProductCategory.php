@@ -17,10 +17,16 @@ class ProductCategory extends Model
     const STATUS_ACTIVE = '1';
 
     protected $fillable = [
+        'code',
         'name',
         'notes',
         'status',
     ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
+    }
 
     public function statusLabel(): string
     {
