@@ -55,6 +55,14 @@
                         <li><a href="{{ route('products.index') }}"><i class="feather-package"></i><span>Produk</span></a></li>
                     @endcanany
                 @endcanany
+
+                @canany(['sales.show'])
+                    <li class="menu-title">Transaksi</li>
+
+                    @canany(['sales.show'])
+                        <li><a href="{{ route('sales.index') }}"><i class="feather-file-text"></i><span>Penjualan</span></a></li>
+                    @endcanany
+                @endcanany
                 {{--   G O O D  L U C K !  ✨  --}}
 
                 @if (auth()->user()->hasRole('super-admin') ||

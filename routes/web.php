@@ -7,6 +7,7 @@ use App\Http\Controllers\MasterData\ProductController;
 use App\Http\Controllers\MasterData\UnitOfMeasureController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\Transaction\SaleController;
 use App\Http\Controllers\UserManagement\AuthenticationLogController;
 use App\Http\Controllers\UserManagement\BusinessUnitController;
 use App\Http\Controllers\UserManagement\LocationController;
@@ -47,6 +48,15 @@ Route::group(['middleware' => ['prevent-back-history', 'auth', 'show-debugbar']]
         Route::resource('units-of-measure', UnitOfMeasureController::class);
         Route::resource('product-categories', ProductCategoryController::class);
         Route::resource('products', ProductController::class);
+    });
+
+    Route::group(['prefix' => 'transactions'], function () {
+        Route::group(['prefix' => 'sales', 'controller' => SaleController::class], function () {
+            Route::get('/edit-company-profile', 'editCompanyProfile')->name('sales.edit-company-profile');
+            Route::put('/update-company-profile', 'updateCompanyProfile')->name('sales.update-company-profile');
+        });
+        Route::get('sales/{sale}/print', [SaleController::class, 'initiatePrinting'])->name('sales.print');
+        Route::resource('sales', SaleController::class);
     });
 
     Route::resource('options', OptionController::class);

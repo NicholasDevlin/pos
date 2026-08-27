@@ -16,6 +16,8 @@ class Option extends Model
 
     const STATUS_ACTIVE = '1';
 
+    const COMPANY_PROFILE = 'company-profile';
+
     protected $fillable = [
         'name',
         'value',

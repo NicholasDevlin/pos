@@ -31,6 +31,11 @@ class Customer extends Model
         'status',
     ];
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
+    }
+
     public function tierLabel(): string
     {
         return match ($this->tier) {
