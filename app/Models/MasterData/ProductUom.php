@@ -28,6 +28,11 @@ class ProductUom extends Model
         'is_default' => 'boolean',
     ];
 
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
     public function unitOfMeasure(): BelongsTo
     {
         return $this->belongsTo(UnitOfMeasure::class, 'units_of_measure_id');

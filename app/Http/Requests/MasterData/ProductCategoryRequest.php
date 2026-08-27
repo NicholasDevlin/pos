@@ -29,7 +29,7 @@ class ProductCategoryRequest extends FormRequest
     public function filters(): array
     {
         return [
-            'code' => ['trim', 'strip_tags', 'upper_case'],
+            'code' => ['trim', 'strip_tags', 'uppercase'],
             'name' => ['trim', 'strip_tags'],
             'notes' => ['trim', 'strip_tags'],
         ];

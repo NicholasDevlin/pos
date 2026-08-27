@@ -1,7 +1,7 @@
 @php
     $metadata = [
         'title' => ($product->id ? 'Edit' : 'Tambah') . ' Produk',
-        'breadcrumb' => [['link' => '#', 'menu' => 'Transaksi'], ['link' => route('products.index'), 'menu' => 'Produk']],
+        'breadcrumb' => [['link' => '#', 'menu' => 'Master Data'], ['link' => route('products.index'), 'menu' => 'Produk']],
     ];
 @endphp
 
