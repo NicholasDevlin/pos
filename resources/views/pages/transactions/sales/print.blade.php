@@ -13,12 +13,7 @@
         }
 
         .border {
-            border: 1px solid #000;
-        }
-
-        .border-y {
-            border-left: 1px solid #000;
-            border-right: 1px solid #000;
+            border: 1px dotted rgb(0 0 0 / 0.45);
         }
 
         .text-center {
@@ -39,7 +34,7 @@
                 margin: 6mm 8mm;
             }
             @page a5page {
-                size: A5 landscape;
+                size: A4;
                 margin: 6mm 8mm;
             }
         }
@@ -61,7 +56,7 @@
                     <th colspan="5" style="font-size: 24px; font-weight: bolder; text-align: left;">
                         {{ $companyProfile['company_name'] ?? '' }}
                     </th>
-                    <th colspan="3" style="text-align: right; font-size: small; font-weight: normal;">{{ $saleItemChunksCount > 1 ? "Hal. $loop->iteration/$saleItemChunksCount" : '' }}</th>
+                    <th colspan="3" style="text-align: right; font-size: small; font-weight: normal;">{{ $saleItemChunksCount > 1 ? "Halaman: $loop->iteration/$saleItemChunksCount" : '' }}</th>
                 </tr>
                 <tr>
                     <td colspan="8" style="padding-bottom: 20px;">
@@ -119,14 +114,14 @@
                         $grandtotal += $total;
                     @endphp
                     <tr>
-                        <td class="border-y text-center">{{ $loop->iteration }}</td>
-                        <td class="border-y">{{ $item->product_name }}</td>
-                        <td class="border-y text-right">{{ decimal_number_format($item->quantity) }}</td>
-                        <td class="border-y text-center">{{ $item->uom }}</td>
-                        <td class="border-y text-right">{{ decimal_number_format($item->price) }}</td>
-                        <td class="border-y text-right">{{ $item->discount_percentage }}</td>
-                        <td class="border-y text-right">{{ decimal_number_format($item->discount_nominal) }}</td>
-                        <td class="border-y text-right">{{ decimal_number_format($total) }}</td>
+                        <td class=" text-center">{{ $loop->iteration }}</td>
+                        <td>{{ $item->product_name }}</td>
+                        <td class=" text-right">{{ decimal_number_format($item->quantity) }}</td>
+                        <td class=" text-center">{{ $item->uom }}</td>
+                        <td class=" text-right">{{ decimal_number_format($item->price) }}</td>
+                        <td class=" text-right">{{ $item->discount_percentage }}</td>
+                        <td class=" text-right">{{ decimal_number_format($item->discount_nominal) }}</td>
+                        <td class=" text-right">{{ decimal_number_format($total) }}</td>
                     </tr>
                 @endforeach
                 @php
@@ -135,18 +130,18 @@
 
                 @for ($i = 0; $i < $chunkLength - $saleItemsCount; $i++)
                     <tr>
-                        <td class="border-y" style="height: 22px;"></td>
-                        <td class="border-y"></td>
-                        <td class="border-y"></td>
-                        <td class="border-y"></td>
-                        <td class="border-y"></td>
-                        <td class="border-y"></td>
-                        <td class="border-y"></td>
-                        <td class="border-y"></td>
+                        <td style="height: 22px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 @endfor
 
-                <tr style="border-top: 1px solid #000;">
+                <tr style="border-top: 1px dotted #000;">
                     <td colspan="4" rowspan="5" style="vertical-align: top;">
                         <div style="display: flex;">
                             <div class="text-center" style="width: 110px; height: 75px; border-bottom: 1px solid #000;">Hormat Kami,</div>

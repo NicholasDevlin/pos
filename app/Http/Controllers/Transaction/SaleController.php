@@ -119,7 +119,7 @@ class SaleController extends Controller
         $companyProfile = $option->value ? json_decode($option->value, true) : [];
 
         $saleItems = $sale->saleItems;
-        $chunkSize = 30;
+        $chunkSize = 33;
 
         $rawChunks = $saleItems->chunk($chunkSize)->values();
         $lastIndex = $rawChunks->count() - 1;
@@ -131,7 +131,7 @@ class SaleController extends Controller
             return (object) [
                 'items' => $chunk,
                 'pageName' => $useA5 ? 'a5page' : 'a4page',
-                'chunkLength' => $useA5 ? 10 : 30,
+                'chunkLength' => $useA5 ? 10 : 33,
             ];
         });
 

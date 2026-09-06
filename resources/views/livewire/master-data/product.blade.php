@@ -154,7 +154,7 @@
                                             @enderror
                                         </td>
                                         <td class="text-center" rowspan="2">
-                                            @if(count($details) > 1)
+                                            @if(count($details) > 1 && $detail['is_deletable'])
                                                 <button type="button" wire:click="removeUom({{ $index }})" class="btn btn-sm btn-danger"><i class="feather-trash-2"></i></button>
                                             @endif
                                         </td>

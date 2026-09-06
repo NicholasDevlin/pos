@@ -9,6 +9,7 @@ use App\Models\MasterData\ProductCategory;
 use App\Models\MasterData\ProductTierPrice;
 use App\Models\MasterData\ProductUom;
 use App\Models\MasterData\UnitOfMeasure;
+use App\Models\Transaction\SaleItem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -48,6 +49,12 @@ class Product extends Component
         if ($this->editMode) {
             $this->fill($product);
 
+            $usedProductUomIds = SaleItem::whereIn('product_uom_id', $product->productUoms->pluck('id'))
+                ->distinct()
+                ->pluck('product_uom_id')
+                ->flip()
+                ->all();
+
             foreach ($product->productUoms as $index => $uom) {
                 $uomData = [
                     'id' => $uom->id,
@@ -59,6 +66,7 @@ class Product extends Component
                     'cost_price_frmt' => decimal_number_format($uom->cost_price),
                     'base_price' => $uom->base_price,
                     'base_price_frmt' => decimal_number_format($uom->base_price),
+                    'is_deletable' => ! isset($usedProductUomIds[$uom->id]),
                     'prices' => [],
                 ];
 
@@ -118,6 +126,7 @@ class Product extends Component
             'cost_price_frmt' => '',
             'base_price' => null,
             'base_price_frmt' => '',
+            'is_deletable' => true,
             'prices' => $prices,
         ];
 
@@ -126,9 +135,11 @@ class Product extends Component
 
     public function removeUom($index): void
     {
-        unset($this->details[$index]);
+        if ($this->details[$index]['is_deletable']) {
+            unset($this->details[$index]);
 
-        $this->dispatch('initialize-select2');
+            $this->dispatch('initialize-select2');
+        }
     }
 
     public function prepareDataForValidation(): void
@@ -206,7 +217,12 @@ class Product extends Component
                     ]
                 );
 
-                $existingUomIds = $product->productUoms()->pluck('id')->toArray();
+                $usedProductUomIds = $this->editMode
+                    ? SaleItem::whereIn('product_uom_id', $product->productUoms->pluck('id'))
+                        ->pluck('product_uom_id')
+                        ->all()
+                    : [];
+                $existingUomIds = $product->productUoms()->whereNotIn('id', $usedProductUomIds)->pluck('id')->toArray();
                 $currentUomIds = [];
 
                 foreach ($this->details as $index => $uomData) {

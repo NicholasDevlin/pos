@@ -47,7 +47,7 @@
                         <li><a href="{{ route('units-of-measure.index') }}"><i class="feather-thermometer"></i><span>Satuan Ukuran</span></a></li>
                     @endcanany
 
-                    @canany(['product_categories.show'])
+                    @canany(['product-categories.show'])
                         <li><a href="{{ route('product-categories.index') }}"><i class="feather-grid"></i><span>Kategori Produk</span></a></li>
                     @endcanany
 
