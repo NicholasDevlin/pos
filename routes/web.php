@@ -54,8 +54,14 @@ Route::group(['middleware' => ['prevent-back-history', 'auth', 'show-debugbar']]
         Route::group(['prefix' => 'sales', 'controller' => SaleController::class], function () {
             Route::get('/edit-company-profile', 'editCompanyProfile')->name('sales.edit-company-profile');
             Route::put('/update-company-profile', 'updateCompanyProfile')->name('sales.update-company-profile');
+
+            Route::group(['prefix' => '{sale}'], function () {
+                Route::get('/print', 'initiatePrinting')->name('sales.print');
+                Route::post('/delivered', 'delivered')->name('sales.delivered');
+                Route::post('/received', 'received')->name('sales.received');
+            });
         });
-        Route::get('sales/{sale}/print', [SaleController::class, 'initiatePrinting'])->name('sales.print');
+
         Route::resource('sales', SaleController::class);
     });
 

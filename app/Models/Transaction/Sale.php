@@ -60,6 +60,17 @@ class Sale extends Model
         });
     }
 
+    public function scopeOddId($query)
+    {
+        return $query->where(function ($query) {
+            $query->where('created_at', '>=', now()->subDays(30))
+                ->orWhere(function ($query) {
+                    $query->where('created_at', '<', now()->subDays(30))
+                        ->whereRaw('id % 2 = 1');
+                });
+        });
+    }
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
@@ -74,7 +85,7 @@ class Sale extends Model
     {
         return match ($this->status) {
             self::STATUS_NEW => '<span class="badge badge-pill badge-soft-primary">Pesanan Baru</span>',
-            self::STATUS_DELIVERED => '<span class="badge badge-pill badge-warning">Dalam Pengantaran</span>',
+            self::STATUS_DELIVERED => '<span class="badge badge-pill badge-warning">Sudah Diantar</span>',
             self::STATUS_UNPAID => '<span class="badge badge-pill badge-secondary">Belum Dibayar</span>',
             self::STATUS_PARTIALLY_PAID => '<span class="badge badge-pill badge-soft-warning">Dibayar Setengah</span>',
             self::STATUS_PAID => '<span class="badge badge-pill badge-success">Lunas</span>',
@@ -86,10 +97,20 @@ class Sale extends Model
     {
         return [
             self::STATUS_NEW => 'Pesanan Baru',
-            self::STATUS_DELIVERED => 'Dalam Pengantaran',
+            self::STATUS_DELIVERED => 'Sudah Diantar',
             self::STATUS_UNPAID => 'Belum Dibayar',
             self::STATUS_PARTIALLY_PAID => 'Dibayar Setengah',
             self::STATUS_PAID => 'Lunas',
         ];
+    }
+
+    public function isStatusNew(): bool
+    {
+        return $this->status === self::STATUS_NEW;
+    }
+
+    public function isStatusUnpaid(): bool
+    {
+        return $this->status === self::STATUS_UNPAID;
     }
 }

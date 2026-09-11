@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class SaleController extends Controller
 {
@@ -18,6 +19,8 @@ class SaleController extends Controller
     {
         $this->middleware(['ajax'])->only(['editCompanyProfile']);
         $this->middleware(['permission:sales.show'])->only(['index', 'show']);
+        $this->middleware(['permission:sales.print'])->only(['initiatePrinting']);
+        $this->middleware(['permission:sales.edit'])->only(['edit', 'editCompanyProfile', 'delivered', 'received']);
     }
 
     public function index(Request $request): View|Collection
@@ -31,14 +34,22 @@ class SaleController extends Controller
 
     private function tableData(): Collection
     {
-        return Sale::orderByDesc('updated_at')
-            ->get(['id', 'customer_name', 'customer_address', 'series_number', 'notes', 'status', 'created_at', 'updated_at'])
-            ->map(function ($datum) {
+        $isUserCanShowAllData = auth()->user()->can('sales.show-all');
+        $isUserCanEdit = auth()->user()->can('sales.edit');
+        $isUserCanPrint = auth()->user()->can('sales.print');
+        $isUserCanDelete = auth()->user()->can('sales.delete');
+
+        return Sale::when(! $isUserCanShowAllData, fn ($q) => $q->oddId())
+            ->orderByDesc('updated_at')
+            ->get(['id', 'customer_name', 'customer_address', 'series_number', 'grand_total', 'notes', 'status', 'created_at', 'updated_at'])
+            ->map(function ($datum) use ($isUserCanEdit, $isUserCanPrint, $isUserCanDelete) {
                 $datum->actions = implode(' ', array_filter([
                     "<a class='btn btn-xs btn-primary' href='".route('sales.show', [$datum->id])."' title='Show'><i class='feather-eye text-white'></i></a>",
-                    "<a class='btn btn-xs btn-secondary' href='".route('sales.edit', [$datum->id])."' title='Edit'><i class='feather-edit-2 text-white'></i></a>",
-                    "<a class='btn btn-xs btn-info' data-remote='true' href='".route('sales.print', [$datum->id])."' title='Print'><i class='feather-printer text-white'></i></a>",
-                    "<a class='btn btn-xs btn-danger' data-remote='true' href='".route('sales.destroy', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='delete' data-confirm='Apakah Anda yakin akan menghapus data ini?' title='Delete'><i class='feather-trash-2 text-white'></i></a>",
+                    $isUserCanEdit && ! $datum->isStatusUnpaid() ? "<a class='btn btn-xs btn-secondary' href='".route('sales.edit', [$datum->id])."' title='Edit'><i class='feather-edit-2 text-white'></i></a>" : null,
+                    $isUserCanPrint ? "<a class='btn btn-xs btn-info' data-remote='true' href='".route('sales.print', [$datum->id])."' title='Print'><i class='feather-printer text-white'></i></a>" : null,
+                    $isUserCanEdit && $datum->isStatusNew() ? "<a class='btn btn-xs btn-warning' data-remote='true' href='".route('sales.delivered', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='post' data-confirm='Apakah Anda yakin Penjualan ini sudah dikirimkan?' title='Terkirim'><i class='feather-truck text-white'></i></a>" : null,
+                    $isUserCanEdit && ! $datum->isStatusUnpaid()  ? "<a class='btn btn-xs btn-dark' data-remote='true' href='".route('sales.received', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='post' data-confirm='Apakah Anda yakin Penjualan ini sudah diterima?' title='Diterima Customer'><i class='feather-archive text-white'></i></a>" : null,
+                    $isUserCanDelete && $datum->isStatusNew() ? "<a class='btn btn-xs btn-danger' data-remote='true' href='".route('sales.destroy', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='delete' data-confirm='Apakah Anda yakin akan menghapus data ini?' title='Delete'><i class='feather-trash-2 text-white'></i></a>" : null,
                 ]));
 
                 $datum->status = $datum->statusLabel();
@@ -136,5 +147,29 @@ class SaleController extends Controller
         });
 
         return view('pages.transactions.sales.print', compact('sale', 'companyProfile', 'saleItemChunks'));
+    }
+
+    public function delivered(Sale $sale): string
+    {
+        if (! $sale->isStatusNew()) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $sale->status = Sale::STATUS_DELIVERED;
+        $sale->save();
+
+        return "<script>window.location='".route('sales.index')."'</script>";
+    }
+
+    public function received(Sale $sale): string
+    {
+        if (! in_array($sale->status, [Sale::STATUS_NEW, Sale::STATUS_DELIVERED])) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
+        $sale->status = Sale::STATUS_UNPAID;
+        $sale->save();
+
+        return "<script>window.location='".route('sales.index')."'</script>";
     }
 }
