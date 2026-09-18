@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use Livewire\Component;
+use Symfony\Component\HttpFoundation\Response;
 
 class Sale extends Component
 {
@@ -286,6 +287,17 @@ class Sale extends Component
 
     public function save()
     {
+        $isUserCanCreate = auth()->user()->can('sales.create');
+        $isUserCanEdit = auth()->user()->can('sales.edit');
+
+        $isAllowedToSave = $this->editMode
+            ? $isUserCanEdit && ! in_array($this->sale->status, SaleModel::paymentStatuses())
+            : $isUserCanCreate;
+
+        if (! $isAllowedToSave) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
         $this->validate();
 
         try {

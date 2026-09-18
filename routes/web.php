@@ -7,6 +7,7 @@ use App\Http\Controllers\MasterData\ProductController;
 use App\Http\Controllers\MasterData\UnitOfMeasureController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\Transaction\ReceiptController;
 use App\Http\Controllers\Transaction\SaleController;
 use App\Http\Controllers\UserManagement\AuthenticationLogController;
 use App\Http\Controllers\UserManagement\BusinessUnitController;
@@ -63,6 +64,12 @@ Route::group(['middleware' => ['prevent-back-history', 'auth', 'show-debugbar']]
         });
 
         Route::resource('sales', SaleController::class);
+
+        Route::group(['prefix' => 'receipts', 'controller' => ReceiptController::class], function () {
+            Route::get('/', 'index')->name('receipts.index');
+            Route::get('/{sale}', 'show')->name('receipts.show');
+            Route::get('/{sale}/edit', 'edit')->name('receipts.edit');
+        });
     });
 
     Route::resource('options', OptionController::class);

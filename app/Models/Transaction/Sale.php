@@ -81,6 +81,11 @@ class Sale extends Model
         return $this->hasMany(SaleItem::class);
     }
 
+    public function receipts(): HasMany
+    {
+        return $this->hasMany(Receipt::class);
+    }
+
     public function statusLabel(): string
     {
         return match ($this->status) {
@@ -112,5 +117,14 @@ class Sale extends Model
     public function isStatusUnpaid(): bool
     {
         return $this->status === self::STATUS_UNPAID;
+    }
+
+    public static function paymentStatuses(): array
+    {
+        return [
+            self::STATUS_UNPAID,
+            self::STATUS_PARTIALLY_PAID,
+            self::STATUS_PAID,
+        ];
     }
 }

@@ -56,11 +56,15 @@
                     @endcanany
                 @endcanany
 
-                @canany(['sales.show'])
+                @canany(['sales.show', 'receipts.show'])
                     <li class="menu-title">Transaksi</li>
 
                     @canany(['sales.show'])
                         <li><a href="{{ route('sales.index') }}"><i class="feather-file-text"></i><span>Penjualan</span></a></li>
+                    @endcanany
+
+                    @canany(['receipts.show'])
+                        <li><a href="{{ route('receipts.index') }}"><i class="feather-dollar-sign"></i><span>Penagihan</span></a></li>
                     @endcanany
                 @endcanany
                 {{--   G O O D  L U C K !  ✨  --}}

@@ -45,10 +45,10 @@ class SaleController extends Controller
             ->map(function ($datum) use ($isUserCanEdit, $isUserCanPrint, $isUserCanDelete) {
                 $datum->actions = implode(' ', array_filter([
                     "<a class='btn btn-xs btn-primary' href='".route('sales.show', [$datum->id])."' title='Show'><i class='feather-eye text-white'></i></a>",
-                    $isUserCanEdit && ! $datum->isStatusUnpaid() ? "<a class='btn btn-xs btn-secondary' href='".route('sales.edit', [$datum->id])."' title='Edit'><i class='feather-edit-2 text-white'></i></a>" : null,
+                    $isUserCanEdit && ! in_array($datum->status, Sale::paymentStatuses()) ? "<a class='btn btn-xs btn-secondary' href='".route('sales.edit', [$datum->id])."' title='Edit'><i class='feather-edit-2 text-white'></i></a>" : null,
                     $isUserCanPrint ? "<a class='btn btn-xs btn-info' data-remote='true' href='".route('sales.print', [$datum->id])."' title='Print'><i class='feather-printer text-white'></i></a>" : null,
                     $isUserCanEdit && $datum->isStatusNew() ? "<a class='btn btn-xs btn-warning' data-remote='true' href='".route('sales.delivered', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='post' data-confirm='Apakah Anda yakin Penjualan ini sudah dikirimkan?' title='Terkirim'><i class='feather-truck text-white'></i></a>" : null,
-                    $isUserCanEdit && ! $datum->isStatusUnpaid()  ? "<a class='btn btn-xs btn-dark' data-remote='true' href='".route('sales.received', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='post' data-confirm='Apakah Anda yakin Penjualan ini sudah diterima?' title='Diterima Customer'><i class='feather-archive text-white'></i></a>" : null,
+                    $isUserCanEdit && ! in_array($datum->status, Sale::paymentStatuses()) ? "<a class='btn btn-xs btn-dark' data-remote='true' href='".route('sales.received', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='post' data-confirm='Apakah Anda yakin Penjualan ini sudah diterima?' title='Diterima Customer'><i class='feather-archive text-white'></i></a>" : null,
                     $isUserCanDelete && $datum->isStatusNew() ? "<a class='btn btn-xs btn-danger' data-remote='true' href='".route('sales.destroy', [$datum->id])."' data-params='{&quot;_token&quot;:&quot;".csrf_token()."&quot;}' data-method='delete' data-confirm='Apakah Anda yakin akan menghapus data ini?' title='Delete'><i class='feather-trash-2 text-white'></i></a>" : null,
                 ]));
 
@@ -72,6 +72,10 @@ class SaleController extends Controller
 
     public function edit(Sale $sale): View
     {
+        if (in_array($sale->status, Sale::paymentStatuses())) {
+            abort(Response::HTTP_NOT_FOUND);
+        }
+
         $sale->load(['customer', 'saleItems']);
 
         return view('pages.transactions.sales.edit', compact('sale'));
@@ -163,7 +167,7 @@ class SaleController extends Controller
 
     public function received(Sale $sale): string
     {
-        if (! in_array($sale->status, [Sale::STATUS_NEW, Sale::STATUS_DELIVERED])) {
+        if (in_array($sale->status, Sale::paymentStatuses())) {
             abort(Response::HTTP_NOT_FOUND);
         }
 
