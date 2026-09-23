@@ -14,7 +14,7 @@
                             <span class="text-danger">*</span>
 
                             <div wire:ignore>
-                                {{ html()->select($name, $customerList, $customer_id)->placeholder('')->class('form-control select2')->disabled($editMode) }}
+                                {{ html()->select($name, $customerList, $customer_id)->placeholder('')->class('form-control select2-customer')->disabled($editMode) }}
                             </div>
 
                             @error($name)
@@ -145,7 +145,7 @@
                                         <td>
                                             <div wire:key="product-select-{{ $index }}-{{ $detail['product_id'] ?? '' }}" wire:ignore>
                                                 @php $name = "details.$index.product_id"; @endphp
-                                                {{ html()->select($name, $productList, $detail['product_id'] ?? null)->placeholder('')->class('form-control select2') }}
+                                                {{ html()->select($name, $productList, $detail['product_id'] ?? null)->placeholder('')->class('form-control select2-product') }}
                                             </div>
 
                                             @error($name)
@@ -158,7 +158,7 @@
                                                     $name = "details.$index.product_uom_id";
                                                     $uomOptions = empty($detail['product_id']) ? [] : $products[$detail['product_id']]['productUoms'];
                                                 @endphp
-                                                {{ html()->select($name, $uomOptions, $detail['product_uom_id'] ?? null)->placeholder('')->class('form-control select2') }}
+                                                {{ html()->select($name, $uomOptions, $detail['product_uom_id'] ?? null)->placeholder('')->class('form-control select2-uom') }}
                                             </div>
 
                                             @error($name)
@@ -274,12 +274,76 @@
         <script>
             window.addEventListener('initialize-select2', () => {
                 $(function() {
-                    $('.select2').off('change').on('change', function() {
+                    $('.select2-customer, .select2-product, .select2-uom').off('change').on('change', function() {
                         const data = $(this).select2('val');
                         @this.set($(this).attr('name'), data);
                     });
 
-                    $('.select2').select2({
+                    $('.select2-customer').select2({
+                        ajax: {
+                            url: '{{ route("customers.search") }}',
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) {
+                                return {
+                                    q: params.term
+                                };
+                            },
+                            processResults: function (data, params) {
+                                const results = data.results.map(item => {
+                                    item.searchTerm = params.term;
+                                    return item;
+                                });
+                                return {
+                                    results: results
+                                };
+                            },
+                            cache: true
+                        },
+                        templateResult: function(data) {
+                            if (!data.id || !data.searchTerm) {
+                                return data.text;
+                            }
+
+                            return highlightFuzzyMatch(data.searchTerm, data.text);
+                        },
+                        minimumInputLength: 3,
+                        placeholder: ''
+                    });
+
+                    $('.select2-product').select2({
+                        ajax: {
+                            url: '{{ route("products.search") }}',
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) {
+                                return {
+                                    q: params.term
+                                };
+                            },
+                            processResults: function (data, params) {
+                                const results = data.results.map(item => {
+                                    item.searchTerm = params.term;
+                                    return item;
+                                });
+                                return {
+                                    results: results
+                                };
+                            },
+                            cache: true
+                        },
+                        templateResult: function(data) {
+                            if (!data.id || !data.searchTerm) {
+                                return data.text;
+                            }
+
+                            return highlightFuzzyMatch(data.searchTerm, data.text);
+                        },
+                        minimumInputLength: 3,
+                        placeholder: ''
+                    });
+
+                    $('.select2-uom').select2({
                         matcher: function(params, data) {
                             if ($.trim(params.term) === '') {
                                 return data;
@@ -303,7 +367,8 @@
                             }
 
                             return highlightFuzzyMatch(data.searchTerm, data.text);
-                        }
+                        },
+                        placeholder: ''
                     });
                 });
             });

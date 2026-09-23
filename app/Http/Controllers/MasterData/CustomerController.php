@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\JsonResponse;
 
 class CustomerController extends Controller
 {
@@ -98,5 +99,31 @@ class CustomerController extends Controller
         session()->flash('success', 'Data berhasil dihapus!');
 
         return "<script>window.location='".route('customers.index')."'</script>";
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        $term = $request->input('q');
+        if (strlen($term) < 3) {
+            return response()->json(['results' => []]);
+        }
+
+        $escapedChars = array_map(function ($char) {
+            return str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $char);
+        }, str_split($term));
+        $pattern = '%' . implode('%', $escapedChars) . '%';
+
+        $customers = Customer::active()
+            ->where('name', 'LIKE', $pattern)
+            ->limit(20)
+            ->get()
+            ->map(function ($customer) {
+                return [
+                    'id' => $customer->id,
+                    'text' => $customer->name,
+                ];
+            });
+
+        return response()->json(['results' => $customers]);
     }
 }

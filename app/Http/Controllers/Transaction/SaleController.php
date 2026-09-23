@@ -76,7 +76,7 @@ class SaleController extends Controller
             abort(Response::HTTP_NOT_FOUND);
         }
 
-        $sale->load(['customer', 'saleItems']);
+        $sale->load(['customer', 'saleItems.productUom.product']);
 
         return view('pages.transactions.sales.edit', compact('sale'));
     }

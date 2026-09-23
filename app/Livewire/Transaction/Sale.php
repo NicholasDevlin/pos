@@ -52,12 +52,9 @@ class Sale extends Component
             $this->discount_nominal_frmt = decimal_number_format($sale->discount_nominal);
 
             foreach ($sale->saleItems as $item) {
-                $productUom = ProductUom::find($item->product_uom_id);
-                $productId = $productUom ? $productUom->product_id : '';
-
                 $this->details[] = [
                     'id' => $item->id,
-                    'product_id' => $productId,
+                    'product_id' => $item->productUom->product_id,
                     'product_uom_id' => $item->product_uom_id,
                     'quantity' => $item->quantity,
                     'quantity_frmt' => decimal_number_format($item->quantity),
@@ -68,34 +65,29 @@ class Sale extends Component
                     'price_frmt' => decimal_number_format($item->price),
                 ];
             }
+
+            $this->customerList = [$this->customer_id => $sale->customer->name];
+
+            $productIds = collect($this->details)->pluck('product_id')->filter()->unique()->all();
+            $productsQuery = Product::with(['productUoms.unitOfMeasure'])
+                ->whereIn('id', $productIds)
+                ->get()
+                ->mapWithKeys(function ($datum) {
+                    return [
+                        $datum->id => [
+                            'id' => $datum->id,
+                            'name' => $datum->name,
+                            'label' => "($datum->code) - $datum->name",
+                            'productUoms' => $datum->productUoms->pluck('unitOfMeasure.name', 'id')->all(),
+                        ],
+                    ];
+                });
+    
+            $this->products = $productsQuery->all();
+            $this->productList = $productsQuery->pluck('label', 'id')->all();
         } else {
             $this->addItem();
         }
-
-        $this->customerList = $this->editMode
-            ? [$this->customer_id => $sale->customer->name]
-            : Customer::active()->pluck('name', 'id')->all();
-        $products = Product::active()
-            ->orderBy('code')
-            ->with(['productUoms.unitOfMeasure'])
-            ->when($this->editMode, function ($query) use ($sale) {
-                return $query->orWhereHas('productUoms', function ($q) use ($sale) {
-                    $q->whereIn('id', $sale->saleItems->pluck('product_uom_id')->all());
-                });
-            })
-            ->get()
-            ->mapWithKeys(function ($datum) {
-                return [
-                    $datum->id => [
-                        'id' => $datum->id,
-                        'name' => $datum->name,
-                        'label' => "($datum->code) - $datum->name",
-                        'productUoms' => $datum->productUoms->pluck('unitOfMeasure.name', 'id')->all(),
-                    ],
-                ];
-            });
-        $this->products = $products->all();
-        $this->productList = $products->pluck('label', 'id')->all();
 
         $this->dispatch('initialize-select2');
     }
@@ -108,8 +100,11 @@ class Sale extends Component
     public function updatedCustomerId(): void
     {
         if (! empty($this->customer_id)) {
-            $this->customer_tier = $this->getCustomerTier();
-            $this->updateAllItemPrices();
+            $customer = Customer::find($this->customer_id);
+            if ($customer) {
+                $this->customerList[$this->customer_id] = $customer->name;
+                $this->customer_tier = $customer->tier;
+            }
         }
     }
 
@@ -144,11 +139,6 @@ class Sale extends Component
         $this->dispatch('initialize-select2');
     }
 
-    protected function getCustomerTier(): ?string
-    {
-        return Customer::where('id', $this->customer_id)->value('tier');
-    }
-
     public function updateItemPrice($index): void
     {
         $uomId = $this->details[$index]['product_uom_id'] ?? null;
@@ -181,13 +171,6 @@ class Sale extends Component
         $this->details[$index]['price_frmt'] = decimal_number_format($price);
     }
 
-    public function updateAllItemPrices(): void
-    {
-        foreach ($this->details as $index => $detail) {
-            $this->updateItemPrice($index);
-        }
-    }
-
     public function updated($property, $value): void
     {
         if (str_starts_with($property, 'details.')) {
@@ -197,7 +180,18 @@ class Sale extends Component
             if (str_ends_with($property, '.product_id')) {
                 $productId = $value;
                 if (! empty($productId)) {
-                    $defaultUom = ProductUom::where('product_id', $productId)->where('is_default', true)->first() ?? ProductUom::where('product_id', $productId)->first();
+                    $product = Product::with(['productUoms.unitOfMeasure'])->find($productId);
+                    if ($product) {
+                        $this->products[$productId] = [
+                            'id' => $product->id,
+                            'name' => $product->name,
+                            'label' => "($product->code) - $product->name",
+                            'productUoms' => $product->productUoms->pluck('unitOfMeasure.name', 'id')->all(),
+                        ];
+                        $this->productList[$productId] = "($product->code) - $product->name";
+                    }
+
+                    $defaultUom = $product->productUoms->firstWhere('is_default', true) ?? $product->productUoms->first();
 
                     if ($defaultUom) {
                         $this->details[$index]['product_uom_id'] = $defaultUom->id;
@@ -268,7 +262,7 @@ class Sale extends Component
     public function rules(): array
     {
         return [
-            'customer_id' => ['required', Rule::in(array_keys($this->customerList))],
+            'customer_id' => ['required', 'exists:customers,id'],
             'customer_tier' => ['required', Rule::in(array_keys(Customer::tierList()))],
             'discount_percentage' => ['nullable', 'integer', 'min:0', 'max:100'],
             'discount_nominal' => ['nullable', 'integer', 'min:0'],
@@ -276,7 +270,7 @@ class Sale extends Component
             'notes' => ['nullable', 'string'],
 
             'details' => ['required', 'array', 'min:1'],
-            'details.*.product_id' => ['required', Rule::in(array_keys($this->productList))],
+            'details.*.product_id' => ['required', 'exists:products,id'],
             'details.*.product_uom_id' => ['required', 'distinct', 'exists:product_uoms,id'],
             'details.*.quantity' => ['required', 'integer', 'min:1'],
             'details.*.price' => ['required', 'integer', 'min:1'],

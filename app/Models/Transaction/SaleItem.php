@@ -7,6 +7,8 @@ use App\Traits\HasDateSerialization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\MasterData\ProductUom;
 
 class SaleItem extends Model
 {
@@ -22,4 +24,9 @@ class SaleItem extends Model
         'discount_percentage',
         'discount_nominal',
     ];
+
+    public function productUom(): BelongsTo
+    {
+        return $this->belongsTo(ProductUom::class);
+    }
 }

@@ -45,6 +45,9 @@ Route::group(['middleware' => ['prevent-back-history', 'auth', 'show-debugbar']]
     });
 
     Route::group(['prefix' => 'master-data'], function () {
+        Route::get('customers/search', [CustomerController::class, 'search'])->name('customers.search');
+        Route::get('products/search', [ProductController::class, 'search'])->name('products.search');
+
         Route::resource('customers', CustomerController::class);
         Route::resource('units-of-measure', UnitOfMeasureController::class);
         Route::resource('product-categories', ProductCategoryController::class);

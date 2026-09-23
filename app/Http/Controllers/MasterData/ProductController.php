@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
@@ -118,5 +119,34 @@ class ProductController extends Controller
         }
 
         return "<script>window.location='".route('products.index')."'</script>";
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        $term = $request->input('q');
+        if (strlen($term) < 3) {
+            return response()->json(['results' => []]);
+        }
+
+        $escapedChars = array_map(function ($char) {
+            return str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $char);
+        }, str_split($term));
+        $pattern = '%' . implode('%', $escapedChars) . '%';
+
+        $products = Product::active()
+            ->where(function ($query) use ($pattern) {
+                $query->where('name', 'LIKE', $pattern)
+                      ->orWhere('code', 'LIKE', $pattern);
+            })
+            ->limit(30)
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'text' => "({$product->code}) - {$product->name}",
+                ];
+            });
+
+        return response()->json(['results' => $products]);
     }
 }
