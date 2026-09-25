@@ -33,7 +33,7 @@ class Product extends Component
 
     public string $name = '';
 
-    public string $notes = '';
+    public ?string $notes = '';
 
     public string $status;
 
